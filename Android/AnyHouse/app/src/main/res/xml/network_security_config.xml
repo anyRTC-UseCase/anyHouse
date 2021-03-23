@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config> //默认配置：允许明文通信
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

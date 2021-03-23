@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginBottom="@dimen/dp_12"
+    android:paddingBottom="@dimen/dp_4"
+    android:paddingTop="@dimen/dp_4"
+    >
+
+    <org.ar.anyhouse.weight.SquircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_15"
+       ></org.ar.anyhouse.weight.SquircleImageView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:layout_toRightOf="@+id/iv_user"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_centerVertical="true"
+        android:textColor="@color/font_color"
+       ></TextView>
+
+    <Button
+        android:id="@+id/btn_invite"
+        android:layout_width="@dimen/dp_100"
+        android:layout_height="@dimen/dp_40"
+        android:textColor="@color/white"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_12"
+        android:text="邀请"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selete_invite"
+      ></Button>
+
+
+</RelativeLayout>

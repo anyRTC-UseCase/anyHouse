@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_130"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_topic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_130"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        android:padding="@dimen/dp_12"
+        android:background="@drawable/shape_et_create"
+        android:gravity="left|top"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/font_color"
+        android:layout_marginTop="@dimen/dp_10"
+        android:paddingBottom="@dimen/dp_10"
+        android:maxLength="60">
+    </EditText>
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:textColor="@color/font_gray_color"
+        android:text="还能输入 60 个字符"></TextView>
+
+
+
+
+
+</FrameLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color"
+    android:paddingLeft="@dimen/dp_40"
+    android:paddingRight="@dimen/dp_40"
+    tools:context=".view.LoginActivity"
+    android:orientation="vertical">
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_150">
+    </Space>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/sp_25"></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_24"
+        android:text="@string/input_name"
+        android:textColor="@color/font_color"
+        android:textSize="@dimen/sp_15"
+        ></TextView>
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:hint="@string/nickname"
+        android:paddingLeft="@dimen/dp_12"
+        android:textSize="@dimen/sp_16"
+        android:maxLength="8"
+        android:textColor="@color/font_color"
+        android:textColorHint="@color/hint_color"
+        android:layout_marginTop="@dimen/dp_24"
+        android:background="@drawable/shape_et_name">
+    </EditText>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_30"
+        android:layout_marginRight="@dimen/dp_30"
+        android:textColor="@color/app_color"
+        android:text="@string/login"
+        android:layout_marginTop="@dimen/dp_40"
+        android:background="@drawable/select_btn_login"></Button>
+
+
+
+</LinearLayout>

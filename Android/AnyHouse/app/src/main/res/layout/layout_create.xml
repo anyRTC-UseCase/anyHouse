@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15"
+    android:background="@drawable/shape_pop_top_white">
+
+    <View
+        android:layout_width="@dimen/dp_50"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/shape_dialog_top_line"></View>
+
+    <TextView
+        android:id="@+id/tv_add_topic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingTop="@dimen/dp_15"
+        android:text="@string/add_a_topic"
+        android:textColor="@color/green_color"
+        android:textSize="@dimen/sp_14"
+        android:textStyle="bold">
+
+    </TextView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:orientation="horizontal">
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:id="@+id/fl_open"
+                android:layout_gravity="center"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_100"
+                android:background="@drawable/select_create_channel_bg">
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60"
+                        android:src="@drawable/img_open">
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="公开"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_10"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:textColor="@color/font_color"></TextView>
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <FrameLayout
+                android:id="@+id/fl_password"
+                android:layout_gravity="center"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_100"
+                android:background="@drawable/select_create_channel_bg">
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="@dimen/dp_60"
+                        android:layout_height="@dimen/dp_60"
+                        android:src="@drawable/img_private">
+                    </ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="私密"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/sp_10"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:textColor="@color/font_color"></TextView>
+
+                </LinearLayout>
+
+            </FrameLayout>
+        </FrameLayout>
+
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@color/list_line_color"></View>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="@dimen/dp_180"
+        android:layout_height="@dimen/dp_30"
+        android:layout_gravity="center"
+        android:hint="频道密码"
+        android:visibility="gone"
+        android:paddingLeft="@dimen/dp_15"
+        android:paddingRight="@dimen/dp_15"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="8"
+        android:textSize="@dimen/sp_12"
+        android:textColorHint="@color/font_gray_color"
+        android:textColor="@color/font_color"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/shape_et_create"></EditText>
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_15"
+        android:gravity="center"
+        android:text="Start a room open to everyone"
+        android:textColor="@color/font_color"></TextView>
+
+
+    <Button
+        android:id="@+id/btn_create"
+        android:layout_width="@dimen/dp_160"
+        android:layout_height="@dimen/dp_40"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/shape_btn_create"
+        android:text="🎉 立即创建"
+        android:textColor="@color/white"></Button>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_20"></Space>
+</LinearLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingRight="@dimen/dp_15"
+    android:background="@drawable/shape_pop_top_white">
+
+    <View
+        android:layout_width="@dimen/dp_50"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_15"
+        android:background="@drawable/shape_dialog_top_line"></View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hands_up_list"
+        android:layout_marginTop="@dimen/dp_12"
+        android:textColor="@color/font_color"
+        android:textStyle="bold"
+        android:drawablePadding="@dimen/dp_4"
+        android:drawableLeft="@drawable/vector_apply_list"
+        android:textSize="@dimen/sp_16">
+    </TextView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_height="@dimen/dp_200"
+        ></androidx.recyclerview.widget.RecyclerView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"></Space>
+</LinearLayout>

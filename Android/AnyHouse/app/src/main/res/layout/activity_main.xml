@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color"
+    tools:context=".view.MainActivity">
+
+        <LinearLayout
+            android:id="@+id/ll_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_color"
+                    android:textSize="@dimen/sp_14"
+                    android:layout_marginRight="@dimen/dp_8"
+                    android:text="这是用户名"></TextView>
+                <org.ar.anyhouse.weight.SquircleImageView
+                    android:id="@+id/iv_user"
+                    android:layout_width="@dimen/dp_32"
+                    android:layout_height="@dimen/dp_32"
+                    android:src="@drawable/a"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginBottom="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"></org.ar.anyhouse.weight.SquircleImageView>
+        </LinearLayout>
+
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:id="@+id/refreshLayout"
+            android:layout_below="@+id/ll_user"
+            android:layout_height="match_parent">
+                <com.scwang.smart.refresh.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_channel"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+                </androidx.recyclerview.widget.RecyclerView>
+                <com.scwang.smart.refresh.footer.ClassicsFooter
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    ></com.scwang.smart.refresh.footer.ClassicsFooter>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:visibility="gone"
+            android:background="@drawable/shape_home_bottom"
+            android:layout_alignParentBottom="true"></View>
+
+        <Button
+            android:id="@+id/btn_create"
+            android:layout_width="@dimen/dp_160"
+            android:layout_height="@dimen/dp_40"
+            android:textColor="@color/white"
+            android:text="+ 创建房间"
+            android:background="@drawable/shape_btn_create"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_30"></Button>
+</RelativeLayout>

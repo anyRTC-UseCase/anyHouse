@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/dp_12"
+    android:gravity="center">
+
+    <org.ar.anyhouse.weight.SquircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="@dimen/dp_59"
+        android:layout_height="@dimen/dp_59"
+        android:layout_gravity="center"
+       >
+    </org.ar.anyhouse.weight.SquircleImageView>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/font_color"
+        android:layout_marginTop="@dimen/dp_8">
+
+    </TextView>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#999999"
+        android:textSize="@dimen/sp_14"
+        android:layout_centerInParent="true"
+        android:text="暂无房间，请尝试下拉刷新或创建房间">
+
+    </TextView>
+
+</RelativeLayout>

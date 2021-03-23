@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">anyHouse</string>
+    <string name="role_changed">您已成为听众</string>
+    <string name="raisedHandsTip">🖐️ 您已举手，主持人将知道您想上台发言</string>
+    <string name="host_leave">👋 主持人已离开频道</string>
+    <string name="input_name">请在下方输入您的昵称，最长8位 😊</string>
+    <string name="nickname">昵称</string>
+    <string name="login">登录 →</string>
+    <string name="welcome">🎉 欢迎</string>
+    <string name="nobody_handup">暂时没人举手</string>
+    <string name="hands_up_list">举手列表</string>
+    <string name="hoster_invited">主持人邀请您上台发言</string>
+    <string name="ok">好的</string>
+    <string name="later">再想想?</string>
+    <string name="listener">听众</string>
+    <string name="leave_quietly">✌️ 离开</string>
+    <string name="set_as_listener">设置为听众</string>
+    <string name="close_other_mic">关闭Ta的麦克风</string>
+    <string name="hang_up">下麦</string>
+    <string name="cancle">取消</string>
+    <string name="leave">离开</string>
+    <string name="leave_tip">离开后所有人都将退出此房间</string>
+    <string name="public_channel">开始一个公开频道</string>
+    <string name="privice_channel">开始一个加密频道</string>
+    <string name="add_topic">添加主题</string>
+    <string name="eg">比如，比特币能否再创新高？</string>
+    <string name="setting">设置</string>
+    <string name="add_a_topic">+ 添加主题</string>
+    <string name="invite_person">邀请上台</string>
+
+</resources>

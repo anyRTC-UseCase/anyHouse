@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/dp_12"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="@dimen/dp_85"
+        android:layout_height="@dimen/dp_85">
+
+        <View
+            android:id="@+id/view_audio_border"
+            android:layout_width="@dimen/dp_79"
+            android:layout_height="@dimen/dp_79"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:background="@drawable/vector_speaker_border">
+        </View>
+    <org.ar.anyhouse.weight.SquircleImageView
+        android:id="@+id/iv_user"
+        android:layout_width="@dimen/dp_72"
+        android:layout_height="@dimen/dp_72"
+        android:layout_centerInParent="true"
+       >
+    </org.ar.anyhouse.weight.SquircleImageView>
+
+        <ImageView
+            android:id="@+id/muted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:elevation="1dp"
+            android:scaleType="center"
+            android:src="@drawable/mic_off_small" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/font_color"
+        android:text="userName"
+        android:layout_marginTop="@dimen/dp_4">
+
+    </TextView>
+
+</LinearLayout>

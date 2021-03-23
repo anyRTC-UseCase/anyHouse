@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueType="floatType"
+                android:valueTo="0.95"
+                android:duration="50"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueType="floatType"
+                android:valueTo="0.95"
+                android:duration="50"/>
+        </set>
+
+
+    </item>
+
+    <item android:state_focused="true">
+
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueType="floatType"
+                android:valueTo="0.95"
+                android:duration="300"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueType="floatType"
+                android:valueTo="0.95"
+                android:duration="300"/>
+        </set>
+
+
+    </item>
+
+    <item android:state_focused="false">
+
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueType="floatType"
+                android:valueTo="1"
+                android:duration="250"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueType="floatType"
+                android:valueTo="1"
+                android:duration="250"/>
+        </set>
+    </item>
+
+    <item android:state_pressed="false">
+
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueType="floatType"
+                android:valueTo="1"
+                android:duration="250"/>
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueType="floatType"
+                android:valueTo="1"
+                android:duration="250"/>
+        </set>
+    </item>
+
+</selector>

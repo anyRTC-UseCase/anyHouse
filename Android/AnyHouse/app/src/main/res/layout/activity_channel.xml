@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_color"
+    tools:context=".view.ChannelActivity">
+
+    <RelativeLayout
+        android:id="@+id/ll_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_color"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_14"
+            android:layout_marginRight="@dimen/dp_8"
+            android:text="这是用户名"></TextView>
+        <org.ar.anyhouse.weight.SquircleImageView
+            android:id="@+id/iv_user"
+            android:layout_toLeftOf="@+id/tv_user_name"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_centerVertical="true"
+            android:src="@drawable/a"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"></org.ar.anyhouse.weight.SquircleImageView>
+
+        <TextView
+            android:id="@+id/tv_host_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="主播暂时离开"
+            android:textSize="@dimen/sp_14"
+            android:textStyle="bold"
+            android:textColor="@color/error_red"
+            android:layout_centerInParent="true"></TextView>
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_above="@+id/rl_bottom"
+        android:layout_below="@+id/ll_user"
+        android:background="@drawable/shape_channel_list">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/dp_20"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_room_topic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_26"
+                    android:layout_marginRight="@dimen/dp_26"
+                    android:drawableRight="@drawable/vector_channel"
+                    android:textColor="@color/font_color"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="这里将会显示房间主题等信息">
+
+                </TextView>
+
+<!--                这里用两个RecyclerView 虽然一个也可以 但是2个将听众主播分开来 好像逻辑上简单些 - 😄-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_speaker"
+                    android:layout_marginTop="@dimen/dp_21"
+                    android:layout_marginLeft="@dimen/dp_33"
+                    android:layout_marginRight="@dimen/dp_33"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:background="@color/white"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_33"
+                    android:text="@string/listener"
+                    android:textColor="#E0E0E0"></TextView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_listener"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginLeft="@dimen/dp_33"
+                    android:layout_marginRight="@dimen/dp_33"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:onClick="leaveChannel"
+            android:layout_width="@dimen/dp_148"
+            android:layout_height="@dimen/dp_40"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_25"
+            android:paddingLeft="@dimen/dp_15"
+            android:paddingRight="@dimen/dp_15"
+            android:gravity="center"
+            android:textColor="@color/leave_button_text"
+            android:background="@drawable/shape_btn_leave"
+            android:text="@string/leave_quietly"></TextView>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/fl_raised_hands"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_marginRight="@dimen/dp_20"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_raised_hands"
+                    android:onClick="raisedHandsListClick"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:background="@drawable/shape_btns_circle"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/vector_apply_list"></ImageView>
+
+                <View
+                    android:id="@+id/view_raised_hands_tip"
+                    android:visibility="gone"
+                    android:layout_width="@dimen/dp_8"
+                    android:layout_height="@dimen/dp_8"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/dp_4"
+                    android:background="@drawable/shape_red_circle"></View>
+            </FrameLayout>
+
+
+
+            <ImageView
+                android:id="@+id/iv_apply"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_20"
+                android:background="@drawable/shape_btns_circle"
+                android:onClick="raisedHands"
+                android:scaleType="centerInside"
+                android:src="@drawable/select_apply_btn"></ImageView>
+
+
+            <ImageView
+                android:id="@+id/iv_mic"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:visibility="gone"
+                android:onClick="micClick"
+                android:background="@drawable/shape_btns_circle"
+                android:scaleType="centerInside"
+                android:src="@drawable/select_listener_mic"></ImageView>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
