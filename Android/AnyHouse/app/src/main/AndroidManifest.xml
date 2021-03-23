@@ -14,16 +14,20 @@
             android:name="releaseTime"
             android:value="${RELEASE_TIME}">
         </meta-data>
-        <activity android:name=".view.SettingActivity"></activity>
-        <activity android:name=".view.ChannelActivity" />
-        <activity android:name=".view.LoginActivity">
+        <activity android:name=".view.SettingActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.ChannelActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
+        <activity android:name=".view.MainActivity"
+            android:screenOrientation="portrait"/>
     </application>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
