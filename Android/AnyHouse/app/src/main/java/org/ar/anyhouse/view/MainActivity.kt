@@ -11,6 +11,7 @@ import com.kongzue.dialog.v3.WaitDialog
 import com.lxj.xpopup.XPopup
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
+import kotlinx.coroutines.delay
 import org.ar.anyhouse.R
 import org.ar.anyhouse.databinding.ActivityMainBinding
 import org.ar.anyhouse.sdk.RtcManager
@@ -196,6 +197,7 @@ class MainActivity : BaseActivity() {
         super.onResume()
         binding.tvUserName.text = ServiceManager.instance.getSelfInfo()?.userName
         mainVM.getRoomList(1)
+
     }
 
 }

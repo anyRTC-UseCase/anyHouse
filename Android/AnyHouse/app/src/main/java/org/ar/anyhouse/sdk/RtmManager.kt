@@ -8,6 +8,8 @@ import org.ar.anyhouse.utils.SpUtil
 import org.ar.anyhouse.utils.launch
 import org.ar.rtm.*
 import org.json.JSONObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 class RtmManager private constructor(){
@@ -109,9 +111,18 @@ class RtmManager private constructor(){
         })
     }
 
-    fun sendChannelMessage(json:String){
-        rtmChannel?.let {
-            it.sendMessage(rtmClient?.createMessage(json),null)
+    suspend fun sendChannelMessage(json:String)= suspendCoroutine<Boolean> {
+        rtmChannel?.let {channel ->
+            channel.sendMessage(rtmClient?.createMessage(json),object :ResultCallback<Void>{
+                override fun onSuccess(var1: Void?) {
+                    it.resume(true)
+                }
+
+                override fun onFailure(var1: ErrorInfo?) {
+                    it.resume(false)
+                }
+
+            })
         }
     }
 

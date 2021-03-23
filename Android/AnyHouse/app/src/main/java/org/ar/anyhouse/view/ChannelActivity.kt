@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.kongzue.dialog.v3.BottomMenu
 import com.kongzue.dialog.v3.MessageDialog
 import com.lxj.xpopup.XPopup
+import kotlinx.coroutines.delay
 import org.ar.anyhouse.R
 import org.ar.anyhouse.databinding.ActivityChannelBinding
 import org.ar.anyhouse.utils.*
@@ -134,9 +135,6 @@ class ChannelActivity : BaseActivity() {
         })
         channelVM.observerTokenPrivilegeWillExpire.observe(this, Observer {
             toast("体验时间已到")
-            if (channelVM.isMeHost()) {
-                channelVM.sendLeaveMessage()
-            }
             channelVM.leaveChannelSDK()
             finish()
         })
@@ -246,10 +244,9 @@ class ChannelActivity : BaseActivity() {
                 baseDialog.doDismiss()
                 true
             }.setOnOkButtonClickListener { baseDialog, v ->
-                baseDialog.doDismiss()
-                channelVM.sendLeaveMessage()
-                channelVM.leaveChannelSDK()
-                finish()
+                    baseDialog.doDismiss()
+                    channelVM.leaveChannelSDK()
+                    finish()
                 true
             }
     }
