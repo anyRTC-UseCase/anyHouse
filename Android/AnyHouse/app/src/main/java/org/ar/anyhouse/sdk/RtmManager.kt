@@ -120,6 +120,20 @@ class RtmManager private constructor(){
         rtmClient?.subscribePeersOnlineStatus(setArray,null)
     }
 
+    suspend fun queryMemberOnline(userId:String)=suspendCoroutine<Boolean> {
+        val setArray = mutableSetOf(userId)
+        rtmClient?.queryPeersOnlineStatus(setArray,object :ResultCallback<Map<String,Boolean>>{
+            override fun onSuccess(var1: Map<String, Boolean>?) {
+               it.resume(var1?.get(userId) as Boolean)
+            }
+
+            override fun onFailure(var1: ErrorInfo?) {
+                it.resume(false)
+            }
+
+        })
+    }
+
     fun unSubMember(userId:String){
         val setArray = mutableSetOf(userId)
         rtmClient?.unsubscribePeersOnlineStatus(setArray,null)

@@ -51,6 +51,10 @@ class ChannelVM : ViewModel() {
         return getSelf()?.userId == userId
     }
 
+    fun isHostOnline():Boolean {//主持人是否还在房间
+       return speakerList.contains(Speaker.Factory.create(getChannelId()))
+    }
+
     //获取自己的信息
     fun getSelf(): Self? {
         return serviceManager.getSelfInfo()
@@ -479,6 +483,12 @@ class ChannelVM : ViewModel() {
     private fun subHostOnlineStatus() {//订阅主播在线状态
         if (!isMeHost()) {
             RtmManager.instance.subMemberOnline(getChannelId())
+            launch({
+                var isOnline = RtmManager.instance.queryMemberOnline(getChannelId())
+                if (!isOnline){
+                    observeHostStatus.value = 1
+                }
+            })
         }
     }
 

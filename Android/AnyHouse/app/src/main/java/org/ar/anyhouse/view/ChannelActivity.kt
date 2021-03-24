@@ -236,13 +236,20 @@ class ChannelActivity : BaseActivity() {
 
 
     fun raisedHands(view: View) {
-        if (view.isSelected) {
-            channelVM.cancleApplyLine()
-        } else {
-            channelVM.applyLine()
-            TopTipDialog().showDialog(supportFragmentManager, getString(R.string.raisedHandsTip))
+        if (channelVM.isHostOnline()) {
+            if (view.isSelected) {
+                channelVM.cancleApplyLine()
+            } else {
+                channelVM.applyLine()
+                TopTipDialog().showDialog(
+                    supportFragmentManager,
+                    getString(R.string.raisedHandsTip)
+                )
+            }
+            view.isSelected = !view.isSelected
+        }else {
+            toast("主持人已经离开")
         }
-        view.isSelected = !view.isSelected
     }
 
     fun leaveChannel(view: View) {
