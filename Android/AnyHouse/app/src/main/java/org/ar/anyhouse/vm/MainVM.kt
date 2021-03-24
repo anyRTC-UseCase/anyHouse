@@ -45,6 +45,8 @@ class MainVM : ViewModel() {
                 ServiceManager.instance.setChannelInfo(Channel(joinRep.data.roomId, joinRep.data.roomName, joinRep.data.uid,joinRep.data.rtmToken,joinRep.data.rtcToken))
             }
             observerJoinChannel.value=joinRep
+        },{
+            observerJoinChannel.value =null
         })
     }
 

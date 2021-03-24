@@ -56,8 +56,10 @@ fun launch(
         block(this)
     } catch (e: Exception) {
         e.printStackTrace()
-        if ((e as HttpStatusCodeException).statusCode=="401"){
-            App.app.cleanAndReLogin()
+        if (e is HttpStatusCodeException) {
+            if (e.statusCode == "401") {
+                App.app.cleanAndReLogin()
+            }
         }
         error_?.let { it(e) }
     }

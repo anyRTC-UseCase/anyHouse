@@ -67,6 +67,11 @@ class MainActivity : BaseActivity() {
 
 
         mainVM.observerJoinChannel.observe(this, Observer {
+            if (it == null){
+                WaitDialog.dismiss()
+                toast("网络出现问题")
+                return@Observer
+            }
             if (it.code == 0) {
                 launch({
                     val loginRTM = mainVM.loginRtm()
