@@ -20,7 +20,7 @@ import org.json.JSONObject
 class ChannelVM : ViewModel() {
 
     val channelInfo = MutableLiveData<Channel>()
-
+    val observeConnectStatus = MutableLiveData<Int>()
     val observeHostStatus = MutableLiveData<Int>()
     val observeRtcStatus = MutableLiveData<Int>()
     val observeRaisedHandsList = MutableLiveData<MutableList<RaisedHandsMember>>()//举手列表变化通知
@@ -260,8 +260,9 @@ class ChannelVM : ViewModel() {
     inner class RtmEvent : RtmListener() {
 
 
-        override fun onMemberJoined(var1: RtmChannelMember?) {
-            super.onMemberJoined(var1)
+        override fun onConnectionStateChanged(var1: Int, var2: Int) {
+            super.onConnectionStateChanged(var1, var2)
+            observeConnectStatus.value =var1
         }
 
         override fun onMemberLeft(var1: RtmChannelMember?) {

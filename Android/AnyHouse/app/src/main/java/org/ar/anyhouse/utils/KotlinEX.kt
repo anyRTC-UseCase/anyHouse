@@ -33,6 +33,13 @@ inline operator fun <T> MutableLiveData<T>.plusAssign(value: T?) {
     setValue(value)
 }
 
+inline fun <T> Boolean.ternary(trueValue: T, falseValue: T): T {
+    return if (this) {
+        trueValue
+    } else {
+        falseValue
+    }
+}
 
 
 /**

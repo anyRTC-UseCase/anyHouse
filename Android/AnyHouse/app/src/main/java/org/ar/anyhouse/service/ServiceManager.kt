@@ -6,6 +6,7 @@ import kotlinx.coroutines.Deferred
 import org.ar.anyhouse.BuildConfig
 import org.ar.anyhouse.utils.Constans
 import org.ar.anyhouse.utils.SpUtil
+import org.ar.anyhouse.utils.ternary
 import org.ar.anyhouse.vm.Channel
 import org.ar.anyhouse.vm.Self
 import rxhttp.async
@@ -59,7 +60,7 @@ class ServiceManager private constructor(){
                 .add("pkg",BuildConfig.APPLICATION_ID)
                 .add("isPrivate",isPrivate)
                 .add("rType",4)
-                .add("roomName",if (topic.isNullOrEmpty()){getSelfInfo()?.userName+"的房间"}else{topic})
+                .add("roomName",topic.isNullOrEmpty().ternary("${getSelfInfo()?.userName}的房间",topic))
                 .add("roomPwd",password).toClass<CreateChannelInfo>().async(scope)
     }
 

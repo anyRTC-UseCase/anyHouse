@@ -5,8 +5,11 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import com.kongzue.dialog.util.BaseDialog
 import com.kongzue.dialog.v3.BottomMenu
 import com.kongzue.dialog.v3.MessageDialog
+import com.kongzue.dialog.v3.TipDialog
+import com.kongzue.dialog.v3.WaitDialog
 import com.lxj.xpopup.XPopup
 import kotlinx.coroutines.delay
 import org.ar.anyhouse.R
@@ -23,6 +26,7 @@ class ChannelActivity : BaseActivity() {
     private lateinit var binding: ActivityChannelBinding
     private lateinit var speakerAdapter: SpeakerAdapter
     private lateinit var listenerAdapter: ListenerAdapter
+    private var isReconnect = false
 
     private val channelVM: ChannelVM by viewModels()
 
@@ -143,6 +147,18 @@ class ChannelActivity : BaseActivity() {
             toast("体验时间已到")
             channelVM.leaveChannelSDK()
             finish()
+        })
+        channelVM.observeConnectStatus.observe(this, Observer { state->
+            if (state == 4) {
+                isReconnect = true
+                WaitDialog.show(this,"正在重连...").cancelable=false
+            } else if (state == 3) {
+                if (isReconnect) {
+                    isReconnect = false
+                    WaitDialog.dismiss()
+                    TipDialog.show(this, "重连成功！", TipDialog.TYPE.SUCCESS)
+                }
+            }
         })
 
     }

@@ -20,8 +20,6 @@ class RtmManager private constructor(){
 
     private var rtmChannel: RtmChannel? =null
 
-    private var rtmConnectStateListenerList  = mutableListOf<RtmConnectStateListener>()
-
 
     fun init(context: Context){
         if (rtmClient == null) {
@@ -49,15 +47,6 @@ class RtmManager private constructor(){
         rtmClient?.let {
             it.sendMessageToPeer(userId,it.createMessage(json),SendMessageOptions(),null)
         }
-    }
-    fun registerConnectListener(rtmConnectStateListener: RtmConnectStateListener){
-        if (rtmConnectStateListener !in rtmConnectStateListenerList) {
-            this.rtmConnectStateListenerList.add(rtmConnectStateListener)
-        }
-    }
-
-    fun unregisterConnectListener(rtmConnectStateListener: RtmConnectStateListener){
-        this.rtmConnectStateListenerList.remove(rtmConnectStateListener)
     }
 
     fun login(token:String,userId:String,@Nullable callback: ResultCallback<Void>){
@@ -154,9 +143,6 @@ class RtmManager private constructor(){
             launch({
                 rtmCallBack?.let {
                     it.onConnectionStateChanged(state, reason)
-                }
-                rtmConnectStateListenerList.forEach {
-                    it.onConnectionStateChanged(state,reason)
                 }
             })
 
