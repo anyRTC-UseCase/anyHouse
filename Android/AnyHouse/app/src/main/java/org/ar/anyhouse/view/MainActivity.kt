@@ -186,7 +186,8 @@ class MainActivity : BaseActivity() {
                         toast("密码不能为空")
                         false
                     }
-                     WaitDialog.show(this,"正在进入...")
+                   baseDialog.doDismiss()
+                    WaitDialog.show(this,"正在进入...")
                     mainVM.joinRoom(roomId,pwdEdittext?.text.toString())
                     true
                 }
