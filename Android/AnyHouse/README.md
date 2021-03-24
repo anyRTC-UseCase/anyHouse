@@ -10,9 +10,9 @@
 
 #### 效果图
 
-![](/Users/liu/anyHouse/Android/AnyHouse/img/preview.jpg)
+![](https://github.com/anyRTC-UseCase/anyHouse/blob/master/Android/AnyHouse/img/preview.jpg)
 
 #### 流程图
 
-![](/Users/liu/anyHouse/Android/AnyHouse/img/anyhouse.jpg)
+![](https://github.com/anyRTC-UseCase/anyHouse/blob/master/Android/AnyHouse/img/anyhouse.jpg)
 
