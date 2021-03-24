@@ -22,6 +22,7 @@ import org.ar.anyhouse.utils.clickWithTrigger
 import org.ar.anyhouse.utils.launch
 import org.ar.anyhouse.utils.toast
 import org.ar.anyhouse.vm.ChannelListDiffCallback
+import org.ar.anyhouse.vm.ErrorType
 import org.ar.anyhouse.vm.MainVM
 import org.ar.anyhouse.weight.CreateChannelPop
 import kotlin.coroutines.resume
@@ -65,13 +66,7 @@ class MainActivity : BaseActivity() {
         })
 
 
-
         mainVM.observerJoinChannel.observe(this, Observer {
-            if (it == null){
-                WaitDialog.dismiss()
-                toast("网络出现问题")
-                return@Observer
-            }
             if (it.code == 0) {
                 launch({
                     val loginRTM = mainVM.loginRtm()
@@ -91,6 +86,23 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        mainVM.observerError.observe(this, Observer {
+            when(it){
+                ErrorType.GET_ROOM_LIST ->{
+                    binding.refreshLayout.finishRefresh()
+                    toast(getString(R.string.refresh_failed))
+                }
+                ErrorType.GET_MORE_ROOM_LIST ->{
+                    binding.refreshLayout.finishLoadMore()
+                    toast(getString(R.string.loadmore_failed))
+                }
+                ErrorType.JOIN_ROOM ->{
+                    WaitDialog.dismiss()
+                    toast(getString(R.string.join_failed))
+                }
+            }
+        })
+
 
         binding.llUser.setOnClickListener {
             startActivity(Intent().apply {
@@ -103,27 +115,17 @@ class MainActivity : BaseActivity() {
         }
 
         binding.refreshLayout.setOnRefreshListener {
-            launch({
                 mainVM.pageNum = 1
                 mainVM.getRoomList(1)
-            },{
-                binding.refreshLayout.finishRefresh()
-                toast("发生错误")
-            })
         }
 
         binding.refreshLayout.setOnLoadMoreListener {
-            launch({
                 if (mainVM.haveNext != 0){
                     mainVM.pageNum ++
                     mainVM.getRoomList(mainVM.pageNum)
                 }else{
                     binding.refreshLayout.finishLoadMoreWithNoMoreData()
                 }
-            },{
-                binding.refreshLayout.finishLoadMore()
-                toast("发生错误")
-            })
         }
 
     }

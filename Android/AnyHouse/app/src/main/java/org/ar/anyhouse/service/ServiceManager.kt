@@ -6,6 +6,7 @@ import kotlinx.coroutines.Deferred
 import org.ar.anyhouse.BuildConfig
 import org.ar.anyhouse.utils.Constans
 import org.ar.anyhouse.utils.SpUtil
+import org.ar.anyhouse.utils.launch
 import org.ar.anyhouse.utils.ternary
 import org.ar.anyhouse.vm.Channel
 import org.ar.anyhouse.vm.Self
@@ -33,24 +34,27 @@ class ServiceManager private constructor(){
     }
 
 
-    suspend fun getRoomStatus()= suspendCoroutine<Int>{
-         RxHttp.postJson(Api.GET_ROOM_STATUS)
+    suspend fun getRoomStatus()= suspendCoroutine<Int>{ con ->
+            RxHttp.postJson(Api.GET_ROOM_STATUS)
                 .add("roomId",getSelfInfo()?.userId)
-                 .add("pkg",BuildConfig.APPLICATION_ID)
-                 .add("cType",1)
-                 .asClass(GetRoomStatusInfo::class.java).observeOn(AndroidSchedulers.mainThread())
-                 .subscribe { result ->
+                .add("pkg",BuildConfig.APPLICATION_ID)
+                .add("cType",1)
+                .asClass(GetRoomStatusInfo::class.java).observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
                     if (result.code == 0){
                         if (result.data.state ==1){//有未结束的
                             setChannelInfo(Channel(result.data.roomId,result.data.roomName,result.data.ownerId,result.data.rtmToken,result.data.rtcToken))
                         }
-                        it.resume(result.data.state)
+                        con.resume(result.data.state)
                     }else if (result.code==1054){
-                        it.resume(2)
+                        con.resume(2)
                     }else{
-                        it.resume(-1)
+                        con.resume(-1)
                     }
-                 }
+                },{
+                    con.resume(-1)
+                })
+
     }
 
 

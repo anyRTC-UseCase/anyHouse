@@ -22,6 +22,7 @@ import org.ar.anyhouse.utils.toast
 import org.ar.anyhouse.view.ChannelActivity
 import org.ar.anyhouse.view.MainActivity
 import org.ar.anyhouse.vm.Channel
+import org.ar.anyhouse.vm.ErrorType
 import org.ar.anyhouse.vm.MainVM
 
 
@@ -111,8 +112,10 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
                         }
                     })
                 }else{
-                    (context as MainActivity).toast("查询房间信息失败～")
+                    (context as MainActivity).toast("创建失败")
                 }
+            },{
+                (context as MainActivity).toast("创建失败")
             })
         }
         binding.etPassword.addTextChangedListener(object :TextWatcher{

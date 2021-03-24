@@ -23,6 +23,7 @@ class MainVM : ViewModel() {
 
     val observerRoomList = MutableLiveData<ChannelListRep>()//房间列表变化通知
     val observerJoinChannel = MutableLiveData<JoinRoomRep>()//加入房间通知
+    val observerError = MutableLiveData<Int>()//异常通知
     var curTopic = ""
     var curChannelType = 0
     var password = ""
@@ -34,6 +35,12 @@ class MainVM : ViewModel() {
             val channelListRep  = ServiceManager.instance.getChannelList(1,15,it).await()
             haveNext = channelListRep.data.haveNext
             observerRoomList.value=channelListRep
+        },{
+            if (pageNum == 1){
+                observerError.value = ErrorType.GET_ROOM_LIST
+            }else{
+                observerError.value = ErrorType.GET_MORE_ROOM_LIST
+            }
         })
     }
 
@@ -46,7 +53,7 @@ class MainVM : ViewModel() {
             }
             observerJoinChannel.value=joinRep
         },{
-            observerJoinChannel.value =null
+            observerError.value = ErrorType.JOIN_ROOM
         })
     }
 
