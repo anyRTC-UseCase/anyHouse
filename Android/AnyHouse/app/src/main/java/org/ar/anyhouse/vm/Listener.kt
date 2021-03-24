@@ -1,6 +1,5 @@
 package org.ar.anyhouse.vm
 
-import org.ar.anyhouse.R
 
 
 /**
