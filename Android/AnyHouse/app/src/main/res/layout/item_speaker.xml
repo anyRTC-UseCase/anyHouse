@@ -12,8 +12,8 @@
 
         <View
             android:id="@+id/view_audio_border"
-            android:layout_width="@dimen/dp_79"
-            android:layout_height="@dimen/dp_79"
+            android:layout_width="@dimen/dp_82"
+            android:layout_height="@dimen/dp_82"
             android:visibility="invisible"
             android:layout_centerInParent="true"
             android:background="@drawable/vector_speaker_border">

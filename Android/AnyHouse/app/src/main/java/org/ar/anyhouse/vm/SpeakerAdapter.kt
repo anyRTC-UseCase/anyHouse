@@ -33,7 +33,8 @@ class SpeakerAdapter : BaseQuickAdapter<Speaker,BaseViewHolder>(R.layout.item_sp
                     val volumeInfo = payload.data as IRtcEngineEventHandler.AudioVolumeInfo
                     val view = holder.getView<View>(R.id.view_audio_border)
 
-                    if (volumeInfo.volume>30){
+                    if (volumeInfo.volume>10){
+                            view.clearAnimation()
                             val alphaAnim = AlphaAnimation(1.0f, 1f)
                             alphaAnim.duration = 1000
                             alphaAnim.setAnimationListener(object : AnimationListener {

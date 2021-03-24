@@ -1,6 +1,7 @@
 package org.ar.anyhouse.vm
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.ar.anyhouse.sdk.Role
