@@ -11,9 +11,7 @@
 ### Demo 体验
 ![扫码体验](https://img-blog.csdnimg.cn/20210324210525628.png)
 ### 精仿的效果
-![](https://img-blog.csdnimg.cn/20210324210600439.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
-
-![](https://img-blog.csdnimg.cn/20210324210552672.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
+![](https://img-blog.csdnimg.cn/20210324220732224.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
 
 
 
@@ -73,6 +71,10 @@ QQ咨询群：580477436
 
 咨询邮箱：hi@dync.cc
 
-技术问题：开发者论坛
+集成咨询：[开发者论坛](https://bbs.anyrtc.io/)
+
+加微信入技术群交流：
+
+<img src="https://img-blog.csdnimg.cn/20210324215941588.png" style="zoom:50%;" />
 
 获取更多帮助前往：[www.anyrtc.io](https://www.anyrtc.io/)
