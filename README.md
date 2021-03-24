@@ -11,9 +11,7 @@
 ### Demo 体验
 ![扫码体验](https://img-blog.csdnimg.cn/20210324210525628.png)
 ### 精仿的效果
-![](https://img-blog.csdnimg.cn/20210324210600439.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
-
-![](https://img-blog.csdnimg.cn/20210324210552672.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
+![](https://img-blog.csdnimg.cn/20210324220732224.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
 
 
 
