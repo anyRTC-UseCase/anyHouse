@@ -31,7 +31,13 @@ class ChannelActivity : BaseActivity() {
         binding = ActivityChannelBinding.inflate(layoutInflater)
         setContentView(binding.root)
         channelVM.channelInfo.observe(this, Observer {
-            binding.tvRoomTopic.text = it.channelName
+            if (it.isNull()){
+                toast("未能获取到房间信息，请重新尝试进入")
+                finish()
+                return@Observer
+            }else {
+                binding.tvRoomTopic.text = it.channelName
+            }
         })
         binding.tvUserName.text = channelVM.getSelf()?.userName
         binding.ivUser.setImageResource(Constans.userIconArray[channelVM.getSelf()?.userIcon]!!)

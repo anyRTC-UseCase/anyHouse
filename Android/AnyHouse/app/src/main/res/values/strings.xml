@@ -20,8 +20,8 @@
     <string name="cancle">取消</string>
     <string name="leave">离开</string>
     <string name="leave_tip">离开后所有人都将退出此房间</string>
-    <string name="public_channel">开始一个公开频道</string>
-    <string name="privice_channel">开始一个加密频道</string>
+    <string name="public_channel">创建一个公开房间</string>
+    <string name="privice_channel">创建一个加密房间</string>
     <string name="add_topic">添加主题</string>
     <string name="eg">比如，比特币能否再创新高？</string>
     <string name="setting">设置</string>

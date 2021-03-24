@@ -141,7 +141,12 @@ class ServiceManager private constructor(){
 
     //获取频道信息
     fun getChannelInfo(): Channel {
-        return channelInfo as Channel
+        return if (channelInfo != null){
+            channelInfo as Channel
+        }else{
+            Channel("","","","","")
+        }
+
     }
 
     //设置频道信息

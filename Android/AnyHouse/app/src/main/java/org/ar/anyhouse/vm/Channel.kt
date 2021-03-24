@@ -6,4 +6,9 @@ package org.ar.anyhouse.vm
  */
 class Channel  constructor(var channelId:String, var channelName:String,var hostId:String,var rtmToken:String,var rtcToken:String){
 
+
+    fun isNull():Boolean
+    {
+        return channelId.isNullOrEmpty()
+    }
 }
