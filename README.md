@@ -71,6 +71,8 @@ QQ咨询群：580477436
 
 咨询邮箱：hi@dync.cc
 
+集成咨询：[开发者论坛](https://bbs.anyrtc.io/)
+
 加微信入技术群交流：
 <img src="https://img-blog.csdnimg.cn/20210324215941588.png" style="zoom:50%;" />
 
