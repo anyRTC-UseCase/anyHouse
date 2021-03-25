@@ -205,6 +205,7 @@ class ChannelActivity : BaseActivity() {
         listenerAdapter = ListenerAdapter()
         listenerAdapter.setOnItemClickListener { adapter, view, position ->
             if (channelVM.isMeHost()) {
+                BottomMenu.reset()
                 BottomMenu.show(
                     this@ChannelActivity,
                     listenerAdapter.getItem(position).isInvite.ternary( arrayOf(getString(R.string.has_invited)),  arrayOf(getString(R.string.invite_person)))

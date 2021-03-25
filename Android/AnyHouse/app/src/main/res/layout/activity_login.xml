@@ -41,6 +41,7 @@
         android:paddingLeft="@dimen/dp_12"
         android:textSize="@dimen/sp_16"
         android:maxLength="8"
+        android:singleLine="true"
         android:textColor="@color/font_color"
         android:textColorHint="@color/hint_color"
         android:layout_marginTop="@dimen/dp_24"
