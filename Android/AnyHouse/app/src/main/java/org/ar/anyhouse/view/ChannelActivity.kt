@@ -106,6 +106,7 @@ class ChannelActivity : BaseActivity() {
             })
             channelVM.observeHostStatus.observe(this, Observer {
                 binding.tvHostLeave.visibility = if (it!=0){View.VISIBLE}else{View.GONE}
+
             })
         }
 
@@ -156,6 +157,7 @@ class ChannelActivity : BaseActivity() {
                 if (isReconnect) {
                     isReconnect = false
                     WaitDialog.dismiss()
+                    channelVM.sendSelfInfo()//
                     TipDialog.show(this, "重连成功！", TipDialog.TYPE.SUCCESS)
                 }
             }
@@ -205,9 +207,15 @@ class ChannelActivity : BaseActivity() {
             if (channelVM.isMeHost()) {
                 BottomMenu.show(
                     this@ChannelActivity,
-                    arrayOf(getString(R.string.invite_person))
+                    listenerAdapter.getItem(position).isInvite.ternary( arrayOf(getString(R.string.has_invited)),  arrayOf(getString(R.string.invite_person)))
                 ) { text, index ->
-                    channelVM.inviteLine(listenerAdapter.getItem(position).userId)
+                    if (text == getString(R.string.has_invited)){
+                        toast("已经发送过邀请")
+                    }else{
+                        channelVM.inviteLine(listenerAdapter.getItem(position).userId)
+                        listenerAdapter.getItem(position).isInvite=true
+                    }
+
                 }
             }
         }

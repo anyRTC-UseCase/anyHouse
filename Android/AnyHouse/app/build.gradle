@@ -15,8 +15,8 @@ android {
         applicationId "org.ar.anyhouse"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.8"
+        versionCode 11
+        versionName "1.0.9"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

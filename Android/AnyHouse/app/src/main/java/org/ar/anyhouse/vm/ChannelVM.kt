@@ -25,7 +25,6 @@ class ChannelVM : ViewModel() {
     val observeHostStatus = MutableLiveData<Int>()
     val observeRtcStatus = MutableLiveData<Int>()
     val observeRaisedHandsList = MutableLiveData<MutableList<RaisedHandsMember>>()//举手列表变化通知
-    val observeInviteStatus = MutableLiveData<Int>()//邀请变化通知
     val observerSpeakList = MutableLiveData<MutableList<Speaker>>()//发言者列表变化通知
     val observerListenerList = MutableLiveData<MutableList<Listener>>()//听众列表通知
     val observeReceiveInvite = MutableLiveData<Boolean>()//收到邀请通知
@@ -190,15 +189,15 @@ class ChannelVM : ViewModel() {
 
     //设置邀请状态 邀请过了就不再邀请了
     fun updateInviteStatus(userId: String) {
-        raisedHandsList.forEachIndexed { index, raisedHandsMember ->
-            if (userId == raisedHandsMember.userId) {
-                raisedHandsMember.isInvited = true
-                observeInviteStatus.value = index
-            }
+        raisedHandsList.find { it.userId == userId }?.let {
+            it.isInvited = true
+            observeRaisedHandsList.value = getAllRaiseHandsMember()
+        }
+        listenerList.find { it.userId == userId }?.let {
+            it.isInvite = true
+            observerListenerList.value = getAllListener()
         }
     }
-
-
 
     fun getChannelInfo(): Channel {
         channelInfo.value = serviceManager.getChannelInfo()
@@ -217,6 +216,17 @@ class ChannelVM : ViewModel() {
         return serviceManager.getChannelInfo().channelName
     }
 
+    fun sendSelfInfo(){
+        launch({
+            RtmManager.instance.sendChannelMessage(JSONObject().apply {
+                put("userIcon", getSelf()?.userIcon)
+                put("userName", getSelf()?.userName)
+                put("userId", getSelf()?.userId)
+                put("action", BroadcastCMD.USER_INFO)
+            }.toString())
+        })
+
+    }
 
     fun getSelfId(): String {
         return getSelf()?.userId.toString()
@@ -270,10 +280,15 @@ class ChannelVM : ViewModel() {
             observeConnectStatus.value =var1
         }
 
+        override fun onMemberJoined(var1: RtmChannelMember?) {
+            super.onMemberJoined(var1)
+        }
+
         override fun onMemberLeft(var1: RtmChannelMember?) {
             super.onMemberLeft(var1)
             removeRaisedHandsMember(RaisedHandsMember(var1?.userId.toString()))
             removeListener(Listener.Factory.create(var1?.userId.toString()))
+            removeSpeaker(Speaker.Factory.create(var1?.userId.toString()))//上麦的听众异常离开的情况
         }
 
         override fun onMessageReceived(var1: RtmMessage?, var2: RtmChannelMember?) {
@@ -305,12 +320,7 @@ class ChannelVM : ViewModel() {
             //加入rtm频成功后 发送
 
             launch({
-                RtmManager.instance.sendChannelMessage(JSONObject().apply {
-                    put("userIcon", getSelf()?.userIcon)
-                    put("userName", getSelf()?.userName)
-                    put("userId", getSelf()?.userId)
-                    put("action", BroadcastCMD.USER_INFO)
-                }.toString())
+                sendSelfInfo()
                 getMemberWhenEnterFromHttp()
             })
 
@@ -366,6 +376,8 @@ class ChannelVM : ViewModel() {
             var1?.let {
                 if (it.containsKey(getChannelId())) {
                     observeHostStatus.value = it[getChannelId()]
+                    removeSpeaker(Speaker.Factory.create(getChannelId()))
+
                 }
             }
         }
@@ -381,14 +393,16 @@ class ChannelVM : ViewModel() {
                 speaker.userName = getSelf()?.userName.toString()
                 speaker.userIcon = getSelf()?.userIcon!!
                 addSpeaker(speaker)
+            }else{
+                subHostOnlineStatus()
             }
             RtmManager.instance.joinChannel(getChannelId())
-            subHostOnlineStatus()
+
 
         }
 
         override fun onUserJoined(uid: String?, elapsed: Int) {
-
+            //rtc的用户加入 listenerList
             launch({
                 val userRep = ServiceManager.instance.getUserInfo(uid.toString(), it).await()
                 if (userRep.code == 0) {
@@ -411,22 +425,18 @@ class ChannelVM : ViewModel() {
         }
 
         override fun onUserOffline(uid: String?, reason: Int) {
-            removeSpeaker(Speaker.Factory.create(uid.toString()))
-            if (reason == 2) {
-                launch({
-                    val userRep = ServiceManager.instance.getUserInfo(uid.toString(), it).await()
-                    if (userRep.code == 0) {
-                        addListener(
-                            createListener(
-                                uid.toString(),
-                                userRep.data.userName,
-                                userRep.data.avatar
-                            )
-                        )
-                    } else {
-                        addListener(createListener(uid.toString(), "未知", 1))
-                    }
-                })
+            if (reason ==2){//对方身份改变 从主播变成听众
+                speakerList.find { it.userId == uid }?.let {
+                    //找到speakerList里的这个人 将个人信息赋值到听众 再从speakeList删除 listenenrList 添加
+                    val listener = Listener.Factory.create(uid.toString())
+                    listener.isInvite = false
+                    listener.userIcon=it.userIcon
+                    listener.userName=it.userName
+                    removeSpeaker(Speaker.Factory.create(uid.toString()))
+                    addListener(listener)
+                }
+            }else{
+                removeSpeaker(Speaker.Factory.create(uid.toString()))
             }
         }
 
@@ -514,6 +524,7 @@ class ChannelVM : ViewModel() {
             listener.userName = it.userName
             listener.isOpenAudio = it.isOpenAudio
             listener.userIcon = it.userIcon
+            listener.isInvite = it.isInvite
             newList.add(listener)
         }
         return newList
@@ -576,8 +587,7 @@ class ChannelVM : ViewModel() {
     }
 
     private fun updateSpeakerAudioState(uid: String, reason: Int) {
-        var speaker = speakerList.find { it.userId == uid }
-        speaker?.let {
+        speakerList.find { it.userId == uid }?.let {
             if (reason == 5) {
                 it.isOpenAudio = false
             } else if (reason == 6) {
@@ -610,6 +620,10 @@ class ChannelVM : ViewModel() {
         raisedHandsList.find { it.userId == raisedHandsMember.userId }?.let {
             raisedHandsList.remove(it)
             observeRaisedHandsList.value = getAllRaiseHandsMember()
+        }
+        listenerList.find { it.userId == raisedHandsMember.userId }?.let {
+            it.isInvite = false
+            observerListenerList.value = getAllListener()
         }
     }
 

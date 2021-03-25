@@ -10,6 +10,7 @@ class Listener private constructor(val userId:String){
     var isOpenAudio : Boolean = false //是否打开了音频
     var userName : String = ""
     var userIcon : Int = 1
+    var isInvite : Boolean = false //是否已经发送邀请
 
 
     object Factory{

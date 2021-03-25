@@ -41,16 +41,14 @@ class RaisedHandsListPop(ctx: Context,channelVM: ChannelVM)  : BottomPopupView(c
         channelVM.observeRaisedHandsList.observe(ctx as ChannelActivity, Observer {
             raisedHandsListAdapter.setDiffNewData(it)
         })
-
-        channelVM.observeInviteStatus.observe(ctx as ChannelActivity, Observer {
-            raisedHandsListAdapter.notifyItemChanged(it,RaisedHandsPayload.INVITE(true))
-        })
-
-
     }
 
 
     override fun onItemChildClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
-        channelVM.inviteLine(raisedHandsListAdapter.getItem(position).userId,true)
+        if (!raisedHandsListAdapter.getItem(position).isInvited) {
+            raisedHandsListAdapter.getItem(position).isInvited=true
+            raisedHandsListAdapter.notifyItemChanged(position)
+            channelVM.inviteLine(raisedHandsListAdapter.getItem(position).userId, true)
+        }
     }
 }

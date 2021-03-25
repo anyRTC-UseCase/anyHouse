@@ -18,9 +18,9 @@
 
 #### 效果图
 
-![](https://github.com/anyRTC-UseCase/anyHouse/blob/master/Android/AnyHouse/img/preview.jpg)
+![](https://gitee.com/anyRTC_admin/anyHouse/blob/master/Android/AnyHouse/img/preview.jpg)
 
 #### 流程图
 
-![](https://github.com/anyRTC-UseCase/anyHouse/blob/master/Android/AnyHouse/img/anyhouse.jpg)
+![](https://gitee.com/anyRTC_admin/anyHouse/blob/master/Android/AnyHouse/img/anyhouse.jpg)
 

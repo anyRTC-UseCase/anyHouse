@@ -26,6 +26,7 @@
     <string name="eg">比如，比特币能否再创新高？</string>
     <string name="setting">设置</string>
     <string name="add_a_topic">+ 添加主题</string>
+    <string name="has_invited">已邀请</string>
     <string name="invite_person">邀请上台</string>
     <string name="refresh_failed">刷新失败</string>
     <string name="loadmore_failed">加载失败</string>
