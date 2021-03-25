@@ -18,9 +18,9 @@
 
 #### 效果图
 
-![](https://gitee.com/anyRTC_admin/anyHouse/blob/master/Android/AnyHouse/img/preview.jpg)
+![](https://img-blog.csdnimg.cn/20210325131722844.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE1NzQxNjAz,size_16,color_FFFFFF,t_70)
 
 #### 流程图
 
-![](https://gitee.com/anyRTC_admin/anyHouse/blob/master/Android/AnyHouse/img/anyhouse.jpg)
+![](https://img-blog.csdnimg.cn/2021032513170967.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE1NzQxNjAz,size_16,color_FFFFFF,t_70)
 
