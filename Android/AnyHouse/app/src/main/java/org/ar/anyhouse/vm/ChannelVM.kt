@@ -376,8 +376,9 @@ class ChannelVM : ViewModel() {
             var1?.let {
                 if (it.containsKey(getChannelId())) {
                     observeHostStatus.value = it[getChannelId()]
-                    removeSpeaker(Speaker.Factory.create(getChannelId()))
-
+                    if (it[getChannelId()]!=0){
+                        removeSpeaker(Speaker.Factory.create(getChannelId()))
+                    }
                 }
             }
         }
@@ -582,6 +583,7 @@ class ChannelVM : ViewModel() {
     private fun removeSpeaker(speaker: Speaker) {
         if (speakerList.contains(speaker)) {
             speakerList.remove(speaker)
+            Log.d("哈哈哈哈哈","removeSpeaker ${speaker.userName}")
         }
         observerSpeakList.value = getAllSpeaker()
     }
