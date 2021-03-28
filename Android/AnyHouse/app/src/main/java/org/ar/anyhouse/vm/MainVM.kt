@@ -45,11 +45,11 @@ class MainVM : ViewModel() {
     }
 
 
-    fun joinRoom(roomId:String,password:String=""){
+    fun joinRoom(roomId:String,password:String="",rType:Int =0){
         launch({
             val joinRep = ServiceManager.instance.joinChannel(roomId, "", it).await()
             if (joinRep.code == 0){
-                ServiceManager.instance.setChannelInfo(Channel(joinRep.data.roomId, joinRep.data.roomName, joinRep.data.uid,joinRep.data.rtmToken,joinRep.data.rtcToken))
+                ServiceManager.instance.setChannelInfo(Channel(joinRep.data.roomId, joinRep.data.roomName, joinRep.data.uid,joinRep.data.rtmToken,joinRep.data.rtcToken,rType))
             }
             observerJoinChannel.value=joinRep
         },{

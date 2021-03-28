@@ -43,7 +43,7 @@ class ServiceManager private constructor(){
                 .subscribe({ result ->
                     if (result.code == 0){
                         if (result.data.state ==1){//有未结束的
-                            setChannelInfo(Channel(result.data.roomId,result.data.roomName,result.data.ownerId,result.data.rtmToken,result.data.rtcToken))
+                            setChannelInfo(Channel(result.data.roomId,result.data.roomName,result.data.ownerId,result.data.rtmToken,result.data.rtcToken,result.data.rType))
                         }
                         con.resume(result.data.state)
                     }else if (result.code==1054){
@@ -149,7 +149,7 @@ class ServiceManager private constructor(){
         return if (channelInfo != null){
             channelInfo as Channel
         }else{
-            Channel("","","","","")
+            Channel("","","","","",0)
         }
 
     }

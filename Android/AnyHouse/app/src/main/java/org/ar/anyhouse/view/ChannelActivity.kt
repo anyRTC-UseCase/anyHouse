@@ -40,12 +40,20 @@ class ChannelActivity : BaseActivity() {
                 finish()
                 return@Observer
             }else {
-                binding.tvRoomTopic.text = it.channelName
+                binding.tvRoomTopic.apply {
+                    text = it.channelName
+                    setCompoundDrawablesWithIntrinsicBounds(0,0,(it.roomType==1).ternary(R.drawable.vector_drawable_password,R.drawable.vector_channel),0)
+                }
             }
         })
         binding.tvUserName.text = channelVM.getSelf()?.userName
         binding.ivUser.setImageResource(Constans.userIconArray[channelVM.getSelf()?.userIcon]!!)
-
+        binding.tvRoomTopic.setOnClickListener {
+            if (!channelVM.isOpenRoom()){
+                //todo : 这里可以加一个点击显示密码的功能
+               // XPopup.Builder(this).atView(binding.tvRoomTopic).asAttachList(arrayOf(channelVM.getChannelInfo().channelId),null,null).show()
+            }
+        }
         initAdapter()
         initRvList()
         initLiveData()

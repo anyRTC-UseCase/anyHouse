@@ -208,6 +208,15 @@ class ChannelVM : ViewModel() {
         return serviceManager.getChannelInfo().channelId
     }
 
+    fun getChannelPassword():String{
+        return ""
+    }
+
+
+    fun isOpenRoom():Boolean{
+        return serviceManager.getChannelInfo().roomType ==0
+    }
+
     fun getToken(): String {
         return serviceManager.getChannelInfo().rtcToken
     }

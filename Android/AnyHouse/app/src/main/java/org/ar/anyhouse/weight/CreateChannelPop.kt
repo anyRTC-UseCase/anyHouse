@@ -92,7 +92,7 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
                         }
                         val info =ServiceManager.instance.createChannel(mainVM.curChannelType,mainVM.curTopic,mainVM.password,it).await()
                         if (info.code == 0 ){
-                            ServiceManager.instance.setChannelInfo(Channel(info.data.roomId,info.data.roomName,info.data.ownerId,info.data.rtmToken,info.data.rtcToken))
+                            ServiceManager.instance.setChannelInfo(Channel(info.data.roomId,info.data.roomName,info.data.ownerId,info.data.rtmToken,info.data.rtcToken,info.data.rType))
                             launch({
                                 WaitDialog.show(context as MainActivity,"正在进入...")
                                 val loginRTM = mainVM.loginRtm()

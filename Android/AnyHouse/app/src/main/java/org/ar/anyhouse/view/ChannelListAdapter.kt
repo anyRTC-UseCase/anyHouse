@@ -8,11 +8,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import org.ar.anyhouse.R
 import org.ar.anyhouse.service.ChannelListRep
 import org.ar.anyhouse.utils.Constans
+import org.ar.anyhouse.utils.ternary
 
 class ChannelListAdapter : BaseQuickAdapter<ChannelListRep.DataBean.ListBean, BaseViewHolder>(R.layout.item_channel) {
 
     override fun convert(holder: BaseViewHolder, item: ChannelListRep.DataBean.ListBean) {
-        holder.setText(R.id.tv_channel_name,item.roomName)
         item.avatars?.let {
             it.forEachIndexed { index, i ->
             when(index){
@@ -50,6 +50,10 @@ class ChannelListAdapter : BaseQuickAdapter<ChannelListRep.DataBean.ListBean, Ba
                 memberTextView.setTextColor(holder.itemView.resources.getColor(R.color.font_color))
                 memberGroup.addView(memberTextView)
             }
+        }
+        holder.getView<TextView>(R.id.tv_channel_name).apply {
+            text = item.roomName
+            setCompoundDrawablesWithIntrinsicBounds(0,0,(item.isPrivate==1).ternary(R.drawable.vector_drawable_password,R.drawable.vector_channel),0)
         }
 
 

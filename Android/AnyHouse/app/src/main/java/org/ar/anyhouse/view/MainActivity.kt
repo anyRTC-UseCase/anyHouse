@@ -143,7 +143,7 @@ class MainActivity : BaseActivity() {
                 showPwdInputDialog(channelListAdapter.getItem(position).roomId,channelListAdapter.getItem(position).roomPwd)
             } else {
                 WaitDialog.show(this,"正在进入...")
-                mainVM.joinRoom(item.roomId)
+                mainVM.joinRoom(item.roomId,"",item.isPrivate)
             }
         }
     }
@@ -199,7 +199,7 @@ class MainActivity : BaseActivity() {
                     }
                    baseDialog.doDismiss()
                     WaitDialog.show(this,"正在进入...")
-                    mainVM.joinRoom(roomId,pwdEdittext?.text.toString())
+                    mainVM.joinRoom(roomId,pwdEdittext?.text.toString(),1)
                     true
                 }
     }
