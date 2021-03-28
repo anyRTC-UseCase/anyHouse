@@ -140,7 +140,7 @@ class MainActivity : BaseActivity() {
         channelListAdapter.setOnItemClickListener { adapter, view, position ->
             val item = channelListAdapter.getItem(position)
             if (item.isPrivate == 1) {
-                showPwdInputDialog(channelListAdapter.getItem(position).roomId)
+                showPwdInputDialog(channelListAdapter.getItem(position).roomId,channelListAdapter.getItem(position).roomPwd)
             } else {
                 WaitDialog.show(this,"正在进入...")
                 mainVM.joinRoom(item.roomId)
@@ -177,7 +177,7 @@ class MainActivity : BaseActivity() {
                 .start()
     }
 
-    private fun showPwdInputDialog(roomId: String) {
+    private fun showPwdInputDialog(roomId: String,password:String) {
         MessageDialog.show(this, "输入密码", "请输入该房间密码，最长8位数字")
                 .setCancelable(true)
                 .setCustomView(R.layout.layout_modify_name
@@ -189,9 +189,13 @@ class MainActivity : BaseActivity() {
                     baseDialog.doDismiss()
                     true
                 }.setOnOkButtonClickListener { baseDialog, v ->
-                    if (pwdEdittext?.text?.trim().isNullOrEmpty()){
+                    if (pwdEdittext?.text?.toString()?.trim().isNullOrEmpty()){
                         toast("密码不能为空")
-                        false
+                        return@setOnOkButtonClickListener false
+                    }
+                    if (pwdEdittext?.text?.toString()?.trim()!=password){
+                        toast("密码错误")
+                        return@setOnOkButtonClickListener false
                     }
                    baseDialog.doDismiss()
                     WaitDialog.show(this,"正在进入...")
