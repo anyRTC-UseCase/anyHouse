@@ -149,6 +149,7 @@ class RtmManager private constructor(){
         rtmClient?.let {
             it.release()
         }
+        rtmClient = null
     }
 
     private inner class RtmEvent: RtmClientListener {

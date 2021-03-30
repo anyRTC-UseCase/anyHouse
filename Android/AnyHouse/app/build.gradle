@@ -15,8 +15,8 @@ android {
         applicationId "org.ar.anyhouse"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 16
-        versionName "1.0.9"
+        versionCode 17
+        versionName "1.1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -85,8 +85,8 @@ dependencies {
     implementation 'com.ljx.rxlife2:rxlife-rxjava:2.0.0'
     implementation 'com.ljx.rxlife:rxlife-coroutine:2.0.1'
 
-    implementation 'org.ar_alpha:rtc:1.0.3.7'
-    implementation 'org.ar:rtm:1.0.1.8'
+    implementation 'org.ar:rtc:4.1.4.2'
+    implementation 'org.ar:rtm:1.0.1.9'
 
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头

@@ -58,7 +58,7 @@ class MainVM : ViewModel() {
     }
 
     suspend fun loginRtm() = suspendCoroutine<Boolean>{
-        RtmManager.instance.logOut()
+       //0062b332bf9b59c3f94b08b374a984b4c14IAAnZ9IXUHUZD+s/aS3R0xs1yrRFiz2Y1MP8mfmQ33T8k2h8ANcAAAAAEABcBDIASyVkYAEA6ANX3mJg
         RtmManager.instance.login(ServiceManager.instance.getChannelInfo().rtmToken,
             ServiceManager.instance.getSelfInfo()?.userId.toString(),object :
                 ResultCallback<Void> {

@@ -9,6 +9,7 @@ import com.tencent.bugly.Bugly
 import okhttp3.OkHttpClient
 import org.ar.anyhouse.sdk.RtcManager
 import org.ar.anyhouse.sdk.RtmManager
+import org.ar.anyhouse.service.ServiceManager
 import org.ar.anyhouse.utils.Constans
 import org.ar.anyhouse.utils.Constans.HTTP_TOKEN
 import org.ar.anyhouse.utils.SpUtil
@@ -91,9 +92,10 @@ class App : Application(),Application.ActivityLifecycleCallbacks{
             editor.putString(Constans.APP_ID,"")
             editor.putString(Constans.HTTP_TOKEN,"")
         }
+        ServiceManager.instance.clean()
         RtmManager.instance.leaveChannel()
         RtmManager.instance.logOut()
-        RtcManager.instance.leaveChannel()
+        RtmManager.instance.release()
         RtcManager.instance.release()
         activity?.let {
             it.toast("登录已失效")
