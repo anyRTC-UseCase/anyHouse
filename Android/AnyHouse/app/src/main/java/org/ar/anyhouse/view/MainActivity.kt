@@ -140,10 +140,15 @@ class MainActivity : BaseActivity() {
         channelListAdapter.setOnItemClickListener { adapter, view, position ->
             val item = channelListAdapter.getItem(position)
             if (item.isPrivate == 1) {
-                showPwdInputDialog(channelListAdapter.getItem(position).roomId,channelListAdapter.getItem(position).roomPwd)
-            } else {
+                if (ServiceManager.instance.getSelfInfo()?.userId == channelListAdapter.getItem(position).ownerUid){
+                    WaitDialog.show(this,"正在进入...")
+                    mainVM.joinRoom(item.roomId,"",item.isPrivate,ServiceManager.instance.getSelfInfo()?.userId == channelListAdapter.getItem(position).ownerUid)
+                }else{
+                    showPwdInputDialog(channelListAdapter.getItem(position).roomId,channelListAdapter.getItem(position).roomPwd)
+                }
+              } else {
                 WaitDialog.show(this,"正在进入...")
-                mainVM.joinRoom(item.roomId,"",item.isPrivate)
+                mainVM.joinRoom(item.roomId,"",item.isPrivate,ServiceManager.instance.getSelfInfo()?.userId == channelListAdapter.getItem(position).ownerUid)
             }
         }
     }
@@ -199,7 +204,7 @@ class MainActivity : BaseActivity() {
                     }
                    baseDialog.doDismiss()
                     WaitDialog.show(this,"正在进入...")
-                    mainVM.joinRoom(roomId,pwdEdittext?.text.toString(),1)
+                    mainVM.joinRoom(roomId,pwdEdittext?.text.toString(),1,false)
                     true
                 }
     }

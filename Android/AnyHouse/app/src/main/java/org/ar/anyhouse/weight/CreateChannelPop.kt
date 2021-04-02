@@ -56,7 +56,7 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
             if (mainVM.curTopic.isNullOrEmpty()){
                 binding.tvTip.text = tipArray[0]
             }else{
-                binding.tvTip.text = tipArray[0] + " 主题： "+mainVM.curTopic
+                binding.tvTip.text = tipArray[0] + "：\"${mainVM.curTopic}\""
             }
 
         }
@@ -69,7 +69,7 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
             if (mainVM.curTopic.isNullOrEmpty()){
                 binding.tvTip.text = tipArray[1]
             }else{
-                binding.tvTip.text = tipArray[1] + " 主题： "+mainVM.curTopic
+                binding.tvTip.text = tipArray[1] + "：\"${mainVM.curTopic}\""
             }
         }
 
@@ -79,38 +79,29 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
 
         binding.btnCreate.setOnClickListener {
             launch({
-                val status = ServiceManager.instance.getRoomStatus()
-                if (status == 1){//房间未结束
-                    showUnFinishDialog()
-                }else if (status ==2 || status ==1054){//房间已经结束
+                if (mainVM.curChannelType == 1){
+                    if (mainVM.password.isNullOrEmpty()){
+                        (context as MainActivity).toast("密码不能为空")
+                        return@launch
+                    }
+                }
+                val info =ServiceManager.instance.createChannel(mainVM.curChannelType,mainVM.curTopic,mainVM.password,it).await()
+                if (info.code == 0 ){
+                    ServiceManager.instance.setChannelInfo(Channel(info.data.roomId,info.data.roomName,info.data.ownerId,info.data.rtmToken,info.data.rtcToken,info.data.isPrivate))
                     launch({
-                        if (mainVM.curChannelType == 1){
-                            if (mainVM.password.isNullOrEmpty()){
-                                (context as MainActivity).toast("密码不能为空")
-                                return@launch
-                            }
-                        }
-                        val info =ServiceManager.instance.createChannel(mainVM.curChannelType,mainVM.curTopic,mainVM.password,it).await()
-                        if (info.code == 0 ){
-                            ServiceManager.instance.setChannelInfo(Channel(info.data.roomId,info.data.roomName,info.data.ownerId,info.data.rtmToken,info.data.rtcToken,info.data.isPrivate))
-                            launch({
-                                WaitDialog.show(context as MainActivity,"正在进入...")
-                                val loginRTM = mainVM.loginRtm()
-                                if (loginRTM) {
-                                    (context as MainActivity).startActivity(Intent().apply {
-                                        setClass(context as MainActivity, ChannelActivity::class.java)
-                                    })
-                                }else{
-                                    (context as MainActivity).toast("登入rtm失败")
-                                }
-                                dismiss()
-                                WaitDialog.dismiss()
+                        WaitDialog.show(context as MainActivity,"正在进入...")
+                        val loginRTM = mainVM.loginRtm()
+                        if (loginRTM) {
+                            (context as MainActivity).startActivity(Intent().apply {
+                                setClass(context as MainActivity, ChannelActivity::class.java)
                             })
-
                         }else{
-                            (context as MainActivity).toast("创建失败")
+                            (context as MainActivity).toast("登入rtm失败")
                         }
+                        dismiss()
+                        WaitDialog.dismiss()
                     })
+
                 }else{
                     (context as MainActivity).toast("创建失败")
                 }
@@ -186,7 +177,7 @@ class CreateChannelPop(context: Context,mainVM: MainVM)  : BottomPopupView(conte
                     binding.tvTip.text = tipArray[mainVM.curChannelType]
                 }else{
                     mainVM.curTopic = (etTopic?.text.toString())
-                    binding.tvTip.text = tipArray[mainVM.curChannelType]+" 主题： "+mainVM.curTopic
+                    binding.tvTip.text = tipArray[mainVM.curChannelType]+ "：\"${mainVM.curTopic}\""
                 }
                 baseDialog.doDismiss()
                 true

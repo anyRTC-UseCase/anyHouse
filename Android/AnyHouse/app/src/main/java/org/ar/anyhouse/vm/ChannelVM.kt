@@ -52,7 +52,7 @@ class ChannelVM : ViewModel() {
     }
 
     fun isHostOnline():Boolean {//主持人是否还在房间
-       return speakerList.contains(Speaker.Factory.create(getChannelId()))
+       return speakerList.contains(Speaker.Factory.create(getChannelHostId()))
     }
 
     //获取自己的信息
@@ -100,7 +100,7 @@ class ChannelVM : ViewModel() {
                 RtmManager.instance.sendChannelMessage(json.toString())
             }
             RtmManager.instance.unregisterListener()
-            RtmManager.instance.unSubMember(getChannelId())
+            RtmManager.instance.unSubMember(getChannelHostId())
             RtmManager.instance.logOut()
             RtmManager.instance.leaveChannel()
             RtcManager.instance.leaveChannel()
@@ -127,7 +127,7 @@ class ChannelVM : ViewModel() {
         val json = JSONObject().apply {
             put("action", BroadcastCMD.RAISE_HANDS)
             put("userName", getSelf()?.userName)
-            put("userIcon", getSelf()?.userIcon)
+            put("avatar", getSelf()?.userIcon)
         }
         RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
         updateUserStatusFromHttp(getSelfId(), 1)
@@ -208,6 +208,10 @@ class ChannelVM : ViewModel() {
         return serviceManager.getChannelInfo().channelId
     }
 
+    fun getChannelHostId(): String {
+        return serviceManager.getChannelInfo().hostId
+    }
+
     fun getChannelPassword():String{
         return ""
     }
@@ -228,7 +232,7 @@ class ChannelVM : ViewModel() {
     fun sendSelfInfo(){
         launch({
             RtmManager.instance.sendChannelMessage(JSONObject().apply {
-                put("userIcon", getSelf()?.userIcon)
+                put("avatar", getSelf()?.userIcon)
                 put("userName", getSelf()?.userName)
                 put("userId", getSelf()?.userId)
                 put("action", BroadcastCMD.USER_INFO)
@@ -249,36 +253,93 @@ class ChannelVM : ViewModel() {
 
     fun getMemberWhenEnterFromHttp() {
         launch({
-            val asyncListenerList = ServiceManager.instance.getListenerList(getChannelId(), it)
-            var listenerStr = asyncListenerList.await()
-            if (listenerStr.code == 0) {
-                if (!listenerStr.data.isNullOrEmpty()) {
-                    listenerStr.data.forEach {
-                        addListener(createListener(it.uid, it.userName, it.avatar))
-                    }
-                }
-            }
+            getListenerListFormHttp(true)
             if (isMeHost()) {
-                var raisedRep =
-                    ServiceManager.instance.getRaisedHandsList(getChannelId(), it).await()
-                if (raisedRep.code == 0) {
-                    raisedRep.data.forEach {
-                        addRaisedHandsMember(
-                            RaisedHandsMember(
-                                it.uid,
-                                it.userName,
-                                it.avatar,
-                                it.state != 1
-                            )
-                        )
-                    }
-                }
-
+                getRaisedHandsListFormHttp()
             }
 
 
         })
+    }
 
+
+    fun getListenerListFormHttp(isFirst: Boolean){
+        launch({
+            val asyncListenerList = ServiceManager.instance.getListenerList(getChannelId(), it)
+            var listenerListBean = asyncListenerList.await()
+            if (listenerListBean.code == 0) {
+                if (!listenerListBean.data.isNullOrEmpty()) {
+                    if (isFirst){
+                        listenerListBean.data.forEach {
+                           val listener=Listener.Factory.create(it.uid)
+                            listener.userName=it.userName
+                            listener.userIcon=it.avatar
+                            addListener(listener)
+                        }
+                    }else{
+                        val memberListFromHttp = mutableListOf<String>()
+                        val localListerList = mutableListOf<String>()
+
+                        listenerListBean.data.forEach {
+                            memberListFromHttp.add(it.uid)
+                        }
+
+                        listenerList.forEach {
+                            localListerList.add(it.userId)
+                        }
+
+                        localListerList.forEach {
+                            if (it !in memberListFromHttp){
+                                removeListener(Listener.Factory.create(it))
+                            }
+                        }
+
+                        memberListFromHttp.forEach {uid ->
+                            if (uid !in localListerList){
+                                listenerListBean.data.find { it.uid == uid }?.let {
+                                    val listener= Listener.Factory.create(it.uid)
+                                    listener.userName=it.userName
+                                    listener.userIcon=it.avatar
+                                    addListener(listener)
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if(!isFirst) {
+                        listenerList.clear()
+                        observerListenerList.value = listenerList
+                    }
+                }
+            }
+        })
+    }
+
+
+
+    fun getRaisedHandsListFormHttp(){
+        launch({
+            var raisedRep =
+                    ServiceManager.instance.getRaisedHandsList(getChannelId(), it).await()
+            if (raisedRep.code == 0) {
+                if (raisedRep.data.size > 0){
+                    raisedRep.data.forEach {
+                        addRaisedHandsMember(
+                                RaisedHandsMember(
+                                        it.uid,
+                                        it.userName,
+                                        it.avatar,
+                                        it.state != 1
+                                )
+                        )
+                    }
+                }else {
+                    raisedHandsList.clear()
+                    observeRaisedHandsList.value = raisedHandsList
+                }
+
+            }
+        })
     }
 
     inner class RtmEvent : RtmListener() {
@@ -291,6 +352,7 @@ class ChannelVM : ViewModel() {
 
         override fun onMemberJoined(var1: RtmChannelMember?) {
             super.onMemberJoined(var1)
+
         }
 
         override fun onMemberLeft(var1: RtmChannelMember?) {
@@ -312,10 +374,20 @@ class ChannelVM : ViewModel() {
                 }
                 BroadcastCMD.USER_INFO -> {
                     launch({
-                        val userIcon = json.getInt("userIcon")
+                        val userIcon = json.getInt("avatar")
                         val userName = json.getString("userName")
-                        val userId = json.getString("userId")
-                        addListener(createListener(userId, userName, userIcon))
+                        //val userId = json.getString("userId")
+                        if (var2?.userId == getChannelHostId()){
+                            val speaker = Speaker.Factory.create(var2?.userId)
+                            speaker.userName = userName
+                            speaker.isHoster = true
+                            speaker.isOpenAudio = true
+                            speaker.userIcon =userIcon
+                            addSpeaker(speaker)
+                        }else{
+                            addListener(createListener(var2?.userId.toString(), userName, userIcon))
+                        }
+
                     })
                 }
             }
@@ -344,7 +416,7 @@ class ChannelVM : ViewModel() {
             when (action) {
                 BroadcastCMD.RAISE_HANDS -> {
                     val userName = json.getString("userName")
-                    val userIcon = json.getInt("userIcon")
+                    val userIcon = json.getInt("avatar")
                     addRaisedHandsMember(
                         RaisedHandsMember(
                             var2.toString(),
@@ -383,10 +455,10 @@ class ChannelVM : ViewModel() {
         override fun onPeersOnlineStatusChanged(var1: MutableMap<String, Int>?) {
             super.onPeersOnlineStatusChanged(var1)
             var1?.let {
-                if (it.containsKey(getChannelId())) {
-                    observeHostStatus.value = it[getChannelId()]
-                    if (it[getChannelId()]!=0){
-                        removeSpeaker(Speaker.Factory.create(getChannelId()))
+                if (it.containsKey(getChannelHostId())) {
+                    observeHostStatus.value = it[getChannelHostId()]
+                    if (it[getChannelHostId()]!=0){
+                        removeSpeaker(Speaker.Factory.create(getChannelHostId()))
                     }
                 }
             }
@@ -407,8 +479,9 @@ class ChannelVM : ViewModel() {
                 subHostOnlineStatus()
             }
             RtmManager.instance.joinChannel(getChannelId())
+        }
 
-
+        override fun onConnectionLost() {//彻底断开rtc
         }
 
         override fun onUserJoined(uid: String?, elapsed: Int) {
@@ -417,14 +490,14 @@ class ChannelVM : ViewModel() {
                 val userRep = ServiceManager.instance.getUserInfo(uid.toString(), it).await()
                 if (userRep.code == 0) {
                     val speaker = Speaker.Factory.create(uid.toString())
-                    speaker.isHoster = uid == getChannelId()
+                    speaker.isHoster = uid == getChannelHostId()
                     speaker.userIcon = userRep.data.avatar
                     speaker.userName = userRep.data.userName
                     speaker.isOpenAudio = true
                     addSpeaker(speaker)
                 } else {
                     val speaker = Speaker.Factory.create(uid.toString())
-                    speaker.isHoster = uid == getChannelId()
+                    speaker.isHoster = uid == getChannelHostId()
                     speaker.userIcon = 1
                     speaker.userName = "未知"
                     speaker.isOpenAudio = true
@@ -437,12 +510,14 @@ class ChannelVM : ViewModel() {
         override fun onUserOffline(uid: String?, reason: Int) {
             if (reason ==2){//对方身份改变 从主播变成听众
                 speakerList.find { it.userId == uid }?.let {
-                    //找到speakerList里的这个人 将个人信息赋值到听众 再从speakeList删除 listenenrList 添加
+                    //找到speakerList里的这个人 将个人信息赋值到听众
                     val listener = Listener.Factory.create(uid.toString())
                     listener.isInvite = false
                     listener.userIcon=it.userIcon
                     listener.userName=it.userName
+                    //再从speakeList删除
                     removeSpeaker(Speaker.Factory.create(uid.toString()))
+                    //listenenrList 添加
                     addListener(listener)
                 }
             }else{
@@ -503,9 +578,9 @@ class ChannelVM : ViewModel() {
 
     private fun subHostOnlineStatus() {//订阅主播在线状态
         if (!isMeHost()) {
-            RtmManager.instance.subMemberOnline(getChannelId())
+            RtmManager.instance.subMemberOnline(getChannelHostId())
             launch({
-                var isOnline = RtmManager.instance.queryMemberOnline(getChannelId())
+                var isOnline = RtmManager.instance.queryMemberOnline(getChannelHostId())
                 if (!isOnline){
                     observeHostStatus.value = 1
                 }

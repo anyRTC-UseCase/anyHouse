@@ -150,7 +150,7 @@ class ChannelActivity : BaseActivity() {
         })
 
         channelVM.observeReject.observe(this, Observer {
-            TopTipDialog().showDialog(supportFragmentManager,"$it 拒绝了你的邀请")
+            TopTipDialog().showDialog(supportFragmentManager,"$it 拒绝了你的邀请",R.color.error_red)
         })
         channelVM.observerTokenPrivilegeWillExpire.observe(this, Observer {
             toast("体验时间已到")
@@ -165,7 +165,11 @@ class ChannelActivity : BaseActivity() {
                 if (isReconnect) {
                     isReconnect = false
                     WaitDialog.dismiss()
-                    channelVM.sendSelfInfo()//
+                    channelVM.getListenerListFormHttp(false)//重连成功后重新拉取听众列表 防止断网期间有人离开没更新
+                    channelVM.sendSelfInfo()//重连成功后发送个人信息
+                    if (channelVM.isMeHost()){//重连成功后重新拉取下举手列表
+                        channelVM.getRaisedHandsListFormHttp()
+                    }
                     TipDialog.show(this, "重连成功！", TipDialog.TYPE.SUCCESS)
                 }
             }
@@ -248,6 +252,10 @@ class ChannelActivity : BaseActivity() {
         binding.rvListener.layoutManager = listenerLayoutManager
         binding.rvSpeaker.adapter = speakerAdapter
         binding.rvListener.adapter = listenerAdapter
+        binding.refreshLayout.setOnRefreshListener {
+            channelVM.getListenerListFormHttp(false)
+            it.finishRefresh(400)
+        }
 
     }
 

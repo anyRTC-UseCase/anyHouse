@@ -13,6 +13,8 @@ import org.ar.anyhouse.utils.ternary
 class ChannelListAdapter : BaseQuickAdapter<ChannelListRep.DataBean.ListBean, BaseViewHolder>(R.layout.item_channel) {
 
     override fun convert(holder: BaseViewHolder, item: ChannelListRep.DataBean.ListBean) {
+
+
         item.avatars?.let {
             it.forEachIndexed { index, i ->
             when(index){
@@ -21,6 +23,8 @@ class ChannelListAdapter : BaseQuickAdapter<ChannelListRep.DataBean.ListBean, Ba
                         holder.setImageResource(R.id.iv_a,
                             it1
                         )
+                        holder.setImageResource(R.id.iv_b,
+                            R.drawable.a)
                     }
                 }
                 1 ->{

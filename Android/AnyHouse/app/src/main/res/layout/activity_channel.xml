@@ -18,21 +18,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/font_color"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/iv_user"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp_14"
-            android:layout_marginRight="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_15"
+
             android:text="这是用户名"></TextView>
         <org.ar.anyhouse.weight.SquircleImageView
             android:id="@+id/iv_user"
-            android:layout_toLeftOf="@+id/tv_user_name"
+            android:layout_alignParentRight="true"
             android:layout_width="@dimen/dp_32"
+            android:layout_marginRight="@dimen/dp_8"
             android:layout_height="@dimen/dp_32"
             android:layout_centerVertical="true"
             android:src="@drawable/a"
             android:layout_marginTop="@dimen/dp_15"
             android:layout_marginBottom="@dimen/dp_15"
-            android:layout_marginRight="@dimen/dp_15"></org.ar.anyhouse.weight.SquircleImageView>
+           ></org.ar.anyhouse.weight.SquircleImageView>
 
         <TextView
             android:id="@+id/tv_host_leave"
@@ -54,10 +56,15 @@
         android:layout_above="@+id/rl_bottom"
         android:layout_below="@+id/ll_user"
         android:background="@drawable/shape_channel_list">
-
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:layout_width="match_parent"
+            android:id="@+id/refreshLayout"
+            android:layout_height="match_parent">
+            <com.scwang.smart.refresh.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-
             android:layout_height="match_parent">
 
             <LinearLayout
@@ -113,8 +120,9 @@
                 </androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
 
+        </androidx.core.widget.NestedScrollView>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 
 

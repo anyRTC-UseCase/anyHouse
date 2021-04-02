@@ -10,6 +10,7 @@ import org.ar.anyhouse.service.CreateChannelInfo
 import org.ar.anyhouse.service.JoinRoomRep
 import org.ar.anyhouse.service.ServiceManager
 import org.ar.anyhouse.utils.launch
+import org.ar.anyhouse.utils.ternary
 import org.ar.anyhouse.utils.toast
 import org.ar.anyhouse.view.ChannelActivity
 import org.ar.anyhouse.view.MainActivity
@@ -45,11 +46,11 @@ class MainVM : ViewModel() {
     }
 
 
-    fun joinRoom(roomId:String,password:String="",rType:Int =0){
+    fun joinRoom(roomId:String,password:String="",rType:Int =0,isSelfRoom:Boolean){
         launch({
-            val joinRep = ServiceManager.instance.joinChannel(roomId, "", it).await()
+            val joinRep = ServiceManager.instance.joinChannel(roomId, "", isSelfRoom.ternary(2,1),it).await()
             if (joinRep.code == 0){
-                ServiceManager.instance.setChannelInfo(Channel(joinRep.data.roomId, joinRep.data.roomName, joinRep.data.uid,joinRep.data.rtmToken,joinRep.data.rtcToken,rType))
+                ServiceManager.instance.setChannelInfo(Channel(joinRep.data.roomId, joinRep.data.roomName, joinRep.data.ownerId,joinRep.data.rtmToken,joinRep.data.rtcToken,rType))
             }
             observerJoinChannel.value=joinRep
         },{
@@ -58,7 +59,6 @@ class MainVM : ViewModel() {
     }
 
     suspend fun loginRtm() = suspendCoroutine<Boolean>{
-       //0062b332bf9b59c3f94b08b374a984b4c14IAAnZ9IXUHUZD+s/aS3R0xs1yrRFiz2Y1MP8mfmQ33T8k2h8ANcAAAAAEABcBDIASyVkYAEA6ANX3mJg
         RtmManager.instance.login(ServiceManager.instance.getChannelInfo().rtmToken,
             ServiceManager.instance.getSelfInfo()?.userId.toString(),object :
                 ResultCallback<Void> {

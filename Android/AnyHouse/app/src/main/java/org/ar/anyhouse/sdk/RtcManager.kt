@@ -97,6 +97,15 @@ class RtcManager private constructor(){
 
         }
 
+        override fun onConnectionLost() {
+            super.onConnectionLost()
+            launch({
+                rtcListener?.let {
+                    it.onConnectionLost()
+                }
+            })
+        }
+
         override fun onUserJoined(uid: String?, elapsed: Int) {
             super.onUserJoined(uid, elapsed)
             launch({

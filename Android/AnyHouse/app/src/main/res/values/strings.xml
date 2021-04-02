@@ -6,7 +6,7 @@
     <string name="input_name">请在下方输入您的昵称，最长8位 😊</string>
     <string name="nickname">昵称</string>
     <string name="login">登录 →</string>
-    <string name="welcome">🎉 欢迎</string>
+    <string name="welcome">🎉 创建账号</string>
     <string name="nobody_handup">暂时没人举手</string>
     <string name="hands_up_list">举手列表</string>
     <string name="hoster_invited">主持人邀请您上台发言</string>

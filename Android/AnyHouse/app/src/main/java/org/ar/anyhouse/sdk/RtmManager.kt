@@ -2,6 +2,7 @@ package org.ar.anyhouse.sdk
 
 import android.content.Context
 import androidx.annotation.Nullable
+import kotlinx.coroutines.delay
 import org.ar.anyhouse.BuildConfig
 import org.ar.anyhouse.utils.Constans
 import org.ar.anyhouse.utils.SpUtil
@@ -85,16 +86,14 @@ class RtmManager private constructor(){
         })
     }
 
-    fun getChannelMember(members: (List<RtmChannelMember>) -> Unit){
+    suspend fun getChannelMember()= suspendCoroutine<MutableList<RtmChannelMember>?>{
         rtmChannel?.getMembers(object :ResultCallback<MutableList<RtmChannelMember>>{
             override fun onSuccess(var1: MutableList<RtmChannelMember>?) {
-                launch({
-                    var1?.let { members(it) }
-                })
-
+                it.resume(var1)
             }
 
             override fun onFailure(var1: ErrorInfo?) {
+                it.resume(null)
             }
 
         })

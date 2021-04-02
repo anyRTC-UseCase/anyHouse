@@ -34,33 +34,10 @@ class ServiceManager private constructor(){
     }
 
 
-    suspend fun getRoomStatus()= suspendCoroutine<Int>{ con ->
-            RxHttp.postJson(Api.GET_ROOM_STATUS)
-                .add("roomId",getSelfInfo()?.userId)
-                .add("pkg",BuildConfig.APPLICATION_ID)
-                .add("cType",1)
-                .asClass(GetRoomStatusInfo::class.java).observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ result ->
-                    if (result.code == 0){
-                        if (result.data.state ==1){//有未结束的
-                            setChannelInfo(Channel(result.data.roomId,result.data.roomName,result.data.ownerId,result.data.rtmToken,result.data.rtcToken,result.data.isPrivate))
-                        }
-                        con.resume(result.data.state)
-                    }else if (result.code==1054){
-                        con.resume(2)
-                    }else{
-                        con.resume(-1)
-                    }
-                },{
-                    con.resume(-1)
-                })
-
-    }
-
-
     suspend fun createChannel(isPrivate:Int,topic:String,password:String,scope: CoroutineScope) : Deferred<CreateChannelInfo> {
         return RxHttp.postJson(Api.CREATE_ROOM)
                 .add("cType",1)
+                .add("isMultAdd",1)
                 .add("pkg",BuildConfig.APPLICATION_ID)
                 .add("isPrivate",isPrivate)
                 .add("rType",4)
@@ -75,10 +52,11 @@ class ServiceManager private constructor(){
                 .toClass<ChannelListRep>().async(scope)
     }
 
-    suspend fun joinChannel(roomId: String,roomPwd:String,scope: CoroutineScope) : Deferred<JoinRoomRep> {
+    suspend fun joinChannel(roomId: String,roomPwd:String,uType:Int,scope: CoroutineScope) : Deferred<JoinRoomRep> {
         return RxHttp.postJson(Api.JOIN_ROOM)
                 .add("cType",1)
                 .add("pkg",BuildConfig.APPLICATION_ID)
+                .add("uType",uType)
                 .add("roomId",roomId)
                 .add("roomPwd",roomPwd)
                 .toClass<JoinRoomRep>().async(scope)

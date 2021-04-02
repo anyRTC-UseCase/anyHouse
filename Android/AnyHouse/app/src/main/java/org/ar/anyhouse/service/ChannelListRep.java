@@ -1,5 +1,6 @@
 package org.ar.anyhouse.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ public class ChannelListRep {
     /**
      * code : 0
      * msg : success.
-     * data : {"list":[{"roomName":"liupp的房间","roomId":"346674","ownerUid":"346674","isPrivate":0,"roomPwd":"","avatars":[8,10],"userList":[{"userName":"liupp","avatar":8,"uid":"346674"}],"userTotalNum":2,"speakerTotalNum":1}],"haveNext":0,"totalPageNum":1}
+     * data : {"list":[{"roomName":"1316的房间","roomId":"930845","ownerUid":"930845","isPrivate":0,"roomPwd":"","avatars":[5],"userList":[{"userName":"1316","avatar":5,"uid":"930845"}],"userTotalNum":1,"speakerTotalNum":1}],"myList":[{"roomName":"455的房间","roomId":"577983","ownerUid":"577983","isPrivate":0,"roomPwd":"","avatars":[10],"userList":[{"userName":"455","avatar":10,"uid":"577983"}],"userTotalNum":1,"speakerTotalNum":1}],"haveNext":0,"totalPageNum":1}
      */
 
     private int code;
@@ -42,21 +43,48 @@ public class ChannelListRep {
 
     public static class DataBean {
         /**
-         * list : [{"roomName":"liupp的房间","roomId":"346674","ownerUid":"346674","isPrivate":0,"roomPwd":"","avatars":[8,10],"userList":[{"userName":"liupp","avatar":8,"uid":"346674"}],"userTotalNum":2,"speakerTotalNum":1}]
+         * list : [{"roomName":"1316的房间","roomId":"930845","ownerUid":"930845","isPrivate":0,"roomPwd":"","avatars":[5],"userList":[{"userName":"1316","avatar":5,"uid":"930845"}],"userTotalNum":1,"speakerTotalNum":1}]
+         * myList : [{"roomName":"455的房间","roomId":"577983","ownerUid":"577983","isPrivate":0,"roomPwd":"","avatars":[10],"userList":[{"userName":"455","avatar":10,"uid":"577983"}],"userTotalNum":1,"speakerTotalNum":1}]
          * haveNext : 0
          * totalPageNum : 1
          */
 
         private List<ListBean> list;
+        private List<MyListBean> myList;
         private int haveNext;
         private int totalPageNum;
 
         public List<ListBean> getList() {
+            List<ListBean> listBeans = new ArrayList<>();
+            if (myList!=null&&myList.size()>0){
+                for (int i =0 ;i<myList.size();i++){
+                    ListBean listBean = new ListBean();
+                    listBean.avatars = myList.get(i).avatars;
+                    listBean.isPrivate=myList.get(i).isPrivate;
+                    listBean.ownerUid=myList.get(i).ownerUid;
+                    listBean.roomId=myList.get(i).roomId;
+                    listBean.roomPwd=myList.get(i).roomPwd;
+                    listBean.roomName=myList.get(i).roomName;
+                    listBean.speakerTotalNum=myList.get(i).speakerTotalNum;
+                    listBean.userList=myList.get(i).userList;
+                    listBean.userTotalNum=myList.get(i).userTotalNum;
+                    listBeans.add(listBean);
+                }
+                list.addAll(0,listBeans);
+            }
             return list;
         }
 
         public void setList(List<ListBean> list) {
             this.list = list;
+        }
+
+        public List<MyListBean> getMyList() {
+            return myList;
+        }
+
+        public void setMyList(List<MyListBean> myList) {
+            this.myList = myList;
         }
 
         public int getHaveNext() {
@@ -77,14 +105,14 @@ public class ChannelListRep {
 
         public static class ListBean {
             /**
-             * roomName : liupp的房间
-             * roomId : 346674
-             * ownerUid : 346674
+             * roomName : 1316的房间
+             * roomId : 930845
+             * ownerUid : 930845
              * isPrivate : 0
              * roomPwd :
-             * avatars : [8,10]
-             * userList : [{"userName":"liupp","avatar":8,"uid":"346674"}]
-             * userTotalNum : 2
+             * avatars : [5]
+             * userList : [{"userName":"1316","avatar":5,"uid":"930845"}]
+             * userTotalNum : 1
              * speakerTotalNum : 1
              */
 
@@ -172,9 +200,9 @@ public class ChannelListRep {
 
             public static class UserListBean {
                 /**
-                 * userName : liupp
-                 * avatar : 8
-                 * uid : 346674
+                 * userName : 1316
+                 * avatar : 5
+                 * uid : 930845
                  */
 
                 private String userName;
@@ -213,11 +241,104 @@ public class ChannelListRep {
                     return Objects.equals(uid, that.uid);
                 }
 
-                @Override
-                public int hashCode() {
-                    return Objects.hash(userName, avatar, uid);
-                }
             }
+        }
+
+        public static class MyListBean {
+            /**
+             * roomName : 455的房间
+             * roomId : 577983
+             * ownerUid : 577983
+             * isPrivate : 0
+             * roomPwd :
+             * avatars : [10]
+             * userList : [{"userName":"455","avatar":10,"uid":"577983"}]
+             * userTotalNum : 1
+             * speakerTotalNum : 1
+             */
+
+            private String roomName;
+            private String roomId;
+            private String ownerUid;
+            private int isPrivate;
+            private String roomPwd;
+            private List<Integer> avatars;
+            private List<ListBean.UserListBean> userList;
+            private int userTotalNum;
+            private int speakerTotalNum;
+
+            public String getRoomName() {
+                return roomName;
+            }
+
+            public void setRoomName(String roomName) {
+                this.roomName = roomName;
+            }
+
+            public String getRoomId() {
+                return roomId;
+            }
+
+            public void setRoomId(String roomId) {
+                this.roomId = roomId;
+            }
+
+            public String getOwnerUid() {
+                return ownerUid;
+            }
+
+            public void setOwnerUid(String ownerUid) {
+                this.ownerUid = ownerUid;
+            }
+
+            public int getIsPrivate() {
+                return isPrivate;
+            }
+
+            public void setIsPrivate(int isPrivate) {
+                this.isPrivate = isPrivate;
+            }
+
+            public String getRoomPwd() {
+                return roomPwd;
+            }
+
+            public void setRoomPwd(String roomPwd) {
+                this.roomPwd = roomPwd;
+            }
+
+            public List<Integer> getAvatars() {
+                return avatars;
+            }
+
+            public void setAvatars(List<Integer> avatars) {
+                this.avatars = avatars;
+            }
+
+            public List<ListBean.UserListBean> getUserList() {
+                return userList;
+            }
+
+            public void setUserList(List<ListBean.UserListBean> userList) {
+                this.userList = userList;
+            }
+
+            public int getUserTotalNum() {
+                return userTotalNum;
+            }
+
+            public void setUserTotalNum(int userTotalNum) {
+                this.userTotalNum = userTotalNum;
+            }
+
+            public int getSpeakerTotalNum() {
+                return speakerTotalNum;
+            }
+
+            public void setSpeakerTotalNum(int speakerTotalNum) {
+                this.speakerTotalNum = speakerTotalNum;
+            }
+
         }
     }
 }

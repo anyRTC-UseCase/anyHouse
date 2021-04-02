@@ -54,7 +54,7 @@ public class JoinRoomRep {
         private int state;
         private String userName;
         private int avatar;
-        private String uid;
+        private String ownerId;
         private String rtcToken;
         private String rtmToken;
 
@@ -98,12 +98,12 @@ public class JoinRoomRep {
             this.avatar = avatar;
         }
 
-        public String getUid() {
-            return uid;
+        public String getOwnerId() {
+            return ownerId;
         }
 
-        public void setUid(String uid) {
-            this.uid = uid;
+        public void setOwnerId(String uid) {
+            this.ownerId = uid;
         }
 
         public String getRtcToken() {

@@ -8,6 +8,7 @@
     android:paddingRight="@dimen/dp_15"
     android:background="@color/app_color">
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -239,7 +240,7 @@
 
 
     </LinearLayout>
-    
+
 
 
 

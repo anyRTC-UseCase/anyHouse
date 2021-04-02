@@ -50,17 +50,17 @@
 
 
                     <org.ar.anyhouse.weight.SquircleImageView
-                        android:id="@+id/iv_a"
-                        android:layout_width="@dimen/dp_34"
-                        android:layout_height="@dimen/dp_34"
-                        android:layout_gravity="right|bottom"
-                        android:src="@drawable/b"></org.ar.anyhouse.weight.SquircleImageView>
-
-                    <org.ar.anyhouse.weight.SquircleImageView
                         android:id="@+id/iv_b"
                         android:layout_width="@dimen/dp_34"
                         android:layout_height="@dimen/dp_34"
-                        android:src="@drawable/f"></org.ar.anyhouse.weight.SquircleImageView>
+                        android:layout_gravity="right|bottom"
+                        android:src="@drawable/a"></org.ar.anyhouse.weight.SquircleImageView>
+
+                    <org.ar.anyhouse.weight.SquircleImageView
+                        android:id="@+id/iv_a"
+                        android:layout_width="@dimen/dp_34"
+                        android:layout_height="@dimen/dp_34"
+                        android:src="@drawable/a"></org.ar.anyhouse.weight.SquircleImageView>
                 </FrameLayout>
 
                 <LinearLayout

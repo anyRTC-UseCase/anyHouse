@@ -42,7 +42,7 @@ class App : Application(),Application.ActivityLifecycleCallbacks{
         RxHttp.setOnParamAssembly {
             val token = SpUtil.get().getString(HTTP_TOKEN,"")
             token?.let {token ->
-                it.addHeader("Authorization","Bearer $token")
+                it.addHeader("artc-token","$token")
             }
             it
         }

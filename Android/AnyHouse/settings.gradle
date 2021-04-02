@@ -1,3 +1,2 @@
-include ':rtm'
 include ':app'
 rootProject.name = "AnyHouse"

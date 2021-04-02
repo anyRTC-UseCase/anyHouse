@@ -14,4 +14,5 @@ abstract class RtcListener  {
     abstract fun onClientRoleChanged(oldRole: Int, newRole: Int)
     abstract fun onTokenPrivilegeWillExpire()
     abstract fun onWarning(code:Int)
+    abstract fun onConnectionLost()
 }
