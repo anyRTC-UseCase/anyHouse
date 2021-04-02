@@ -1,0 +1,17 @@
+platform :ios, '9.0'
+use_frameworks!
+
+target 'anyHouse-iOS' do
+    #anyRTC 音视频库
+    pod 'ARtcKit_iOS', '~> 4.1.4.1'
+    #anyRTC 实时消息库
+    pod 'ARtmKit_iOS', '~> 1.0.1.4'
+    
+    pod 'SnapKit'
+    pod 'Alamofire'
+    pod 'SwiftyJSON', '< 5.0.0'
+    pod 'MJRefresh'
+    pod 'AttributedString'
+    pod 'SVProgressHUD'
+    pod 'IQKeyboardManager'
+end
