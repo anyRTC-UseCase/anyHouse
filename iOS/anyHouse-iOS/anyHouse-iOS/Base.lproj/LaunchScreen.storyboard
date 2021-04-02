@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_logo" translatesAutoresizingMaskIntoConstraints="NO" id="S90-mD-gSA">
+                                <rect key="frame" x="159" y="265.5" width="96" height="96"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="96" id="5Od-Qh-cDM"/>
+                                    <constraint firstAttribute="width" constant="96" id="jWv-wj-zZp"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="欢迎进入anyHouse" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7L2-ON-Wls">
+                                <rect key="frame" x="146.5" y="383.5" width="121.5" height="20"/>
+                                <fontDescription key="fontDescription" name="PingFangSC-Medium" family="PingFang SC" pointSize="14"/>
+                                <color key="textColor" red="0.17998901010000001" green="0.19191232320000001" blue="0.2085541487" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="0.94531947370000002" green="0.93799048659999995" blue="0.89616948370000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="S90-mD-gSA" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Beu-He-geO"/>
+                            <constraint firstItem="7L2-ON-Wls" firstAttribute="centerX" secondItem="S90-mD-gSA" secondAttribute="centerX" id="Lan-8b-tyF"/>
+                            <constraint firstItem="S90-mD-gSA" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.7" id="P2b-Y1-mb7"/>
+                            <constraint firstItem="7L2-ON-Wls" firstAttribute="top" secondItem="S90-mD-gSA" secondAttribute="bottom" constant="22" id="wz3-ma-ufr"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="icon_logo" width="96" height="96"/>
+    </resources>
+</document>
