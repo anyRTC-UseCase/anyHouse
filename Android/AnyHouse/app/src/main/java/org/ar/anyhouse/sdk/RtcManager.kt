@@ -27,12 +27,6 @@ class RtcManager private constructor(){
                 put("Cmd","SetAudioAiNoise")
                 put("Enable",1)//开启智能降噪
             }.toString())
-            it.setParameters(JSONObject().apply {
-                put("Cmd", "ConfPriCloudAddr")
-                put("ServerAdd", "pro.gateway.agrtc.cn")
-                put("Port", 6080)
-            }.toString())
-
         }
     }
     

@@ -240,7 +240,8 @@ class ChannelActivity : BaseActivity() {
             speakerAdapter.setDiffNewData(it)
         })
         channelVM.observerListenerList.observe(this, Observer {
-            listenerAdapter.setDiffNewData(it)
+            listenerAdapter.data.clear()//!!!!这里需要优化 setDiffNewData有时候无效- -
+            listenerAdapter.setList(it)
         })
 
     }

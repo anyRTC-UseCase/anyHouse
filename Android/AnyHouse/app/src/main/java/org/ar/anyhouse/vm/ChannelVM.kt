@@ -290,7 +290,8 @@ class ChannelVM : ViewModel() {
 
                         localListerList.forEach {
                             if (it !in memberListFromHttp){
-                                removeListener(Listener.Factory.create(it))
+                                listenerList.remove(Listener.Factory.create(it))
+                               // removeListener(Listener.Factory.create(it))
                             }
                         }
 
@@ -300,10 +301,12 @@ class ChannelVM : ViewModel() {
                                     val listener= Listener.Factory.create(it.uid)
                                     listener.userName=it.userName
                                     listener.userIcon=it.avatar
-                                    addListener(listener)
+                                    listenerList.add(listener)
+                                    //addListener(listener)
                                 }
                             }
                         }
+                        observerListenerList.value=getAllListener()
                     }
                 }else{
                     if(!isFirst) {
@@ -658,8 +661,9 @@ class ChannelVM : ViewModel() {
     }
 
     private fun removeListener(listener: Listener) {
-        if (listenerList.contains(listener)) {
-            listenerList.remove(listener)
+
+        listenerList.find { it.userId ==listener.userId }?.let {
+            listenerList.remove(it)
         }
         observerListenerList.value = getAllListener()
     }
@@ -706,10 +710,6 @@ class ChannelVM : ViewModel() {
         raisedHandsList.find { it.userId == raisedHandsMember.userId }?.let {
             raisedHandsList.remove(it)
             observeRaisedHandsList.value = getAllRaiseHandsMember()
-        }
-        listenerList.find { it.userId == raisedHandsMember.userId }?.let {
-            it.isInvite = false
-            observerListenerList.value = getAllListener()
         }
     }
 

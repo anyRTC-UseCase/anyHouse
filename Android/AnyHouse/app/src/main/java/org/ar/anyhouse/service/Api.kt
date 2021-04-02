@@ -6,7 +6,7 @@ object  Api {
 
     @DefaultDomain
     @JvmField
-    val BASE_API = "http://pro.arlive.agrtc.cn:12680/arapi/arlive/v1/anyhouse/"
+    val BASE_API = "http://arlive.agrtc.cn:12680/arapi/arlive/v1/anyhouse/"
 
     //登录
     const val LOGIN = "signIn"

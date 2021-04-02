@@ -26,11 +26,6 @@ class RtmManager private constructor(){
         if (rtmClient == null) {
             val appId = SpUtil.get().getString(Constans.APP_ID, "")
             rtmClient = RtmClient.createInstance(context, appId.toString(), RtmEvent())
-            rtmClient?.setParameters(JSONObject().apply {
-                put("Cmd", "ConfPriCloudAddr")
-                put("ServerAdd", "pro.rtmgw.agrtc.cn")
-                put("Port", 7080)
-            }.toString())
         }
     }
 
