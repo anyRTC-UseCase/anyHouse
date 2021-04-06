@@ -157,6 +157,12 @@ class ChannelActivity : BaseActivity() {
             channelVM.leaveChannelSDK()
             finish()
         })
+
+        channelVM.observerInviteStatus.observe(this, Observer {userId ->
+            listenerAdapter.data.find { it.userId == userId }?.let {
+                it.isInvite = false
+            }
+        })
         channelVM.observeConnectStatus.observe(this, Observer { state->
             if (state == 4) {
                 isReconnect = true

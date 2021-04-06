@@ -28,14 +28,14 @@ class ChannelVM : ViewModel() {
     val observerSpeakList = MutableLiveData<MutableList<Speaker>>()//发言者列表变化通知
     val observerListenerList = MutableLiveData<MutableList<Listener>>()//听众列表通知
     val observeReceiveInvite = MutableLiveData<Boolean>()//收到邀请通知
-    private var isInvite = false //是不是处于被邀请状态 是的话 就不用弹窗了
+    private var isInvited = false //是不是处于被邀请状态 是的话 就不用弹窗了
     val observeReject = MutableLiveData<String>()//拒绝邀请通知
     val observeMyRoleChange = MutableLiveData<Int>() // 身份改变
     val observerCloseMic = MutableLiveData<Boolean>() //麦克风状态
     val observerSpeakerVolume = MutableLiveData<Array<out IRtcEngineEventHandler.AudioVolumeInfo>?>()//说话者音量大小
     val observerHosterLeave = MutableLiveData<Boolean>() //主持人离开
     val observerTokenPrivilegeWillExpire = MutableLiveData<Boolean>()//token过期
-
+    val observerInviteStatus = MutableLiveData<String>()//听众拒绝或者接收后更新听众邀请状态
 
     private val speakerList = mutableListOf<Speaker>() //发言者列表
     private val listenerList = mutableListOf<Listener>()//听众列表
@@ -162,7 +162,7 @@ class ChannelVM : ViewModel() {
         }
         RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
         updateUserStatusFromHttp(getSelfId(), 0)
-        isInvite = false
+        isInvited = false
     }
 
     fun acceptLine() {
@@ -171,7 +171,7 @@ class ChannelVM : ViewModel() {
         }
         RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
         updateUserStatusFromHttp(getSelfId(), 2)
-        isInvite = false
+        isInvited = false
     }
 
 
@@ -436,19 +436,23 @@ class ChannelVM : ViewModel() {
                     removeRaisedHandsMember(RaisedHandsMember(var2.toString()))
                 }
                 BroadcastCMD.INVITE_SPEAK -> {
-                    if (!isInvite) {
+                    if (!isInvited) {
                         observeReceiveInvite.value = true
-                        isInvite = true
+                        isInvited = true
                     }
                 }
                 BroadcastCMD.REJECT_INVITE -> {
+                    observerInviteStatus.value=var2.toString()
                     val userName = json.getString("userName")
                     removeRaisedHandsMember(RaisedHandsMember(var2.toString()))
                     observeReject.value = userName
+
                 }
                 BroadcastCMD.ACCEPT_INVITE -> {
+                    observerInviteStatus.value=var2.toString()
                     removeRaisedHandsMember(RaisedHandsMember(var2.toString()))
                 }
+
                 BroadcastCMD.ROLE_CHANGE_GUEST -> {
                     changeRoleToListener()
                 }
