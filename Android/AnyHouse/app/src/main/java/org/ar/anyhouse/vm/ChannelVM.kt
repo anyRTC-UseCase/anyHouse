@@ -28,6 +28,7 @@ class ChannelVM : ViewModel() {
     val observerSpeakList = MutableLiveData<MutableList<Speaker>>()//发言者列表变化通知
     val observerListenerList = MutableLiveData<MutableList<Listener>>()//听众列表通知
     val observeReceiveInvite = MutableLiveData<Boolean>()//收到邀请通知
+    private var isInvite = false //是不是处于被邀请状态 是的话 就不用弹窗了
     val observeReject = MutableLiveData<String>()//拒绝邀请通知
     val observeMyRoleChange = MutableLiveData<Int>() // 身份改变
     val observerCloseMic = MutableLiveData<Boolean>() //麦克风状态
@@ -161,6 +162,7 @@ class ChannelVM : ViewModel() {
         }
         RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
         updateUserStatusFromHttp(getSelfId(), 0)
+        isInvite = false
     }
 
     fun acceptLine() {
@@ -169,6 +171,7 @@ class ChannelVM : ViewModel() {
         }
         RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
         updateUserStatusFromHttp(getSelfId(), 2)
+        isInvite = false
     }
 
 
@@ -433,7 +436,10 @@ class ChannelVM : ViewModel() {
                     removeRaisedHandsMember(RaisedHandsMember(var2.toString()))
                 }
                 BroadcastCMD.INVITE_SPEAK -> {
-                    observeReceiveInvite.value = true
+                    if (!isInvite) {
+                        observeReceiveInvite.value = true
+                        isInvite = true
+                    }
                 }
                 BroadcastCMD.REJECT_INVITE -> {
                     val userName = json.getString("userName")
