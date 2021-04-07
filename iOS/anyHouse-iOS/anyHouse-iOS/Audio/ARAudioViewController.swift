@@ -10,10 +10,11 @@ import SwiftyJSON
 import MJRefresh
 import ARtcKit
 import ARtmKit
+import Alamofire
 
 private let reuseIdentifier = "anyHouse_CellID"
 private let leftPadding: CGFloat = 33.0
-private let itemSpacing: CGFloat = 33.0
+private let itemSpacing: CGFloat = 24.0
 
 class ARAudioViewController: UIViewController {
     @IBOutlet weak var backView: UIView!
@@ -67,6 +68,7 @@ class ARAudioViewController: UIViewController {
             listButton.isHidden = true
             audioButton.isHidden = true
             micButton.isHidden = false
+            view.viewWithTag(56)?.isHidden = false
         }
         
         let refreshHeader = MJRefreshNormalHeader { [weak self] in
@@ -192,6 +194,15 @@ class ARAudioViewController: UIViewController {
                 }
             }
             break
+        case 56:
+            let manager = NetworkReachabilityManager()
+            if manager?.networkReachabilityStatus != .notReachable {
+                SVProgressHUD.showSuccess(withStatus: "举报成功！")
+            } else {
+                SVProgressHUD.showError(withStatus: "举报失败！")
+            }
+            SVProgressHUD.dismiss(withDelay: 1)
+            break
         default:
             break
         }
@@ -222,7 +233,7 @@ class ARAudioViewController: UIViewController {
     func invitationedUserMic(micUp: Bool) {
         //被邀请
         UIView.animate(withDuration: 0.2) {
-            self.dropConstraint.constant = micUp ? 0 : -140
+            self.dropConstraint.constant = micUp ? 0 : -120
             self.view.layoutIfNeeded()
         }
         var statusBarStyle: UIStatusBarStyle?
@@ -399,6 +410,22 @@ extension ARAudioViewController: ARtcEngineDelegate {
                     micModel.enableAudio = (reason == .reasonRemoteMuted) ? 0 : 1
                     collectionView.reloadSections(NSIndexSet(index: 0) as IndexSet)
                     return
+                }
+            }
+        }
+    }
+    
+    func rtcEngine(_ engine: ARtcEngineKit, reportAudioVolumeIndicationOfSpeakers speakers: [ARtcAudioVolumeInfo], totalVolume: Int) {
+        for speakInfo in speakers {
+            if speakInfo.volume > 3 {
+                for index in 0..<modelArr[0].count {
+                    let micModel = modelArr[0][index]
+                    if speakInfo.uid == micModel.uid || (speakInfo.uid == "0" && micModel.uid == UserDefaults.string(forKey: .uid)){
+                        let indexPath: NSIndexPath = NSIndexPath(row: index, section: 0)
+                        let cell: ARAudioViewCell? = collectionView.cellForItem(at: indexPath as IndexPath) as? ARAudioViewCell
+                        cell?.startAnimation()
+                        break
+                    }
                 }
             }
         }

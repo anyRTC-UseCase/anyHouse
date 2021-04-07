@@ -137,7 +137,7 @@ extension NSObject {
         //离开房间
         let parameters : NSDictionary = ["roomId": roomId as Any, "isOwner": broadcaster ? 1 : 0]
         ARNetWorkHepler.getResponseData("leaveRoom", parameters: parameters as? [String : AnyObject], headers: true, success: { (result) in
-            print("leaveRoom: \(result) \n\(parameters)")
+            
         }) { (error) in
             
         }

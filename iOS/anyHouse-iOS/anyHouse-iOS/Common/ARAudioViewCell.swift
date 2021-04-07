@@ -55,20 +55,6 @@ class ARMainTableViewCell: UITableViewCell {
     }
 }
 
-class ARAudioViewCell: UICollectionViewCell {
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var audioImageView: UIImageView!
-    
-    func updateCell(micModel: ARMicModel?, width: CGFloat) {
-        let avatar = (micModel?.avatar ?? 1) - 1
-        avatarImageView.image = UIImage(named: headListArr![avatar] as! String)
-        nameLabel.text = micModel?.userName
-        audioImageView.isHidden = (micModel?.enableAudio != 0)
-        avatarImageView.layer.cornerRadius = (width - 24)/2
-    }
-}
-
 class ARAudioCollectionReusableView: UICollectionReusableView {
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -136,5 +122,88 @@ class ARGeneralTableViewCell: UITableViewCell {
             frame.size.width -= 2 * 15
             super.frame = frame
         }
+    }
+}
+
+class ARAudioViewCell: UICollectionViewCell {
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var audioImageView: UIImageView!
+    
+    private let radarAnimation = "radarAnimation"
+
+    private var animationLayer: CALayer?
+    private var animationGroup: CAAnimationGroup?
+    private var isAnimation: Bool = false
+    
+    func updateCell(micModel: ARMicModel?, width: CGFloat) {
+        let avatar = (micModel?.avatar ?? 1) - 1
+        avatarImageView.image = UIImage(named: headListArr![avatar] as! String)
+        nameLabel.text = micModel?.userName
+        audioImageView.isHidden = (micModel?.enableAudio != 0)
+        avatarImageView.layer.cornerRadius = (width - 24)/2
+        animationLayer?.removeAnimation(forKey: radarAnimation)
+    }
+    
+    func startAnimation() {
+        if !isAnimation {
+            animationLayer?.removeAnimation(forKey: radarAnimation)
+            let second = makeRadarAnimation(showRect: avatarImageView.frame, isRound: false)
+            contentView.layer.insertSublayer(second, below: avatarImageView.layer)
+        }
+    }
+    
+    private func makeRadarAnimation(showRect: CGRect, isRound: Bool) -> CALayer {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.frame = showRect
+        if isRound {
+            shapeLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: showRect.width, height: showRect.height)).cgPath
+        } else {
+            shapeLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: showRect.width, height: showRect.height), cornerRadius: (avatarImageView.width - 9)/2).cgPath
+        }
+
+        shapeLayer.fillColor = UIColor(hexString: "#CEBD7A").cgColor
+        shapeLayer.opacity = 0.0
+
+        animationLayer = shapeLayer
+
+        let replicator = CAReplicatorLayer()
+        replicator.frame = shapeLayer.bounds
+        replicator.instanceCount = 4
+        replicator.instanceDelay = 1.0
+        replicator.addSublayer(shapeLayer)
+
+        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnimation.fromValue = NSNumber(floatLiteral: 1.0)
+        opacityAnimation.toValue = NSNumber(floatLiteral: 0)
+
+        let scaleAnimation = CABasicAnimation(keyPath: "transform")
+        if isRound {
+            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 0, 0, 0))
+        } else {
+            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.0, 1.0, 0))
+        }
+        scaleAnimation.toValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.3, 1.3, 0))
+
+        let animationGroup = CAAnimationGroup()
+        animationGroup.animations = [opacityAnimation, scaleAnimation]
+        animationGroup.duration = 1.0
+        animationGroup.repeatCount = 1
+        animationGroup.autoreverses = false
+        animationGroup.delegate = self
+
+        self.animationGroup = animationGroup
+
+        shapeLayer.add(animationGroup, forKey: radarAnimation)
+
+        return replicator
+    }
+    
+    func animationDidStart(_ anim: CAAnimation) {
+        isAnimation = true
+    }
+    
+    override func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        isAnimation = false
     }
 }

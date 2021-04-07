@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.backgroundColor = UIColor.white
 
             let storyBoard = UIStoryboard.init(name: "Main", bundle: nil)
-            let mainVc = storyBoard.instantiateViewController(withIdentifier: "anyHouse_Main") as? UINavigationController
-            self.window?.rootViewController = mainVc
+            let navVc = storyBoard.instantiateViewController(withIdentifier: "anyHouse_Main") as? UINavigationController
+            self.window?.rootViewController = navVc
         }
         return true
     }
