@@ -1,6 +1,6 @@
 ## 高仿 ClubHouse
 
-> 本文将介绍目前市面上比较流行的音频沙龙应用场景，并讲述基于 anyRTC  SDK,模仿 CloubHouse 的步骤。
+> 本文将介绍目前市面上比较流行的音频沙龙应用场景，并讲述基于 anyRTC  SDK,模仿 ClubHouse 的步骤。
 
 
 
