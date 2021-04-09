@@ -42,7 +42,7 @@ class ARNetWorkHepler: NSObject {
                     let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
                     guard let signInVc = storyboard.instantiateViewController(withIdentifier: "anyHouse_SignIn") as? ViewController else { return }
                     UIApplication.shared.keyWindow?.rootViewController = signInVc
-                } else if response.result.error.debugDescription.contains("-1020") {
+                } else {
                     SVProgressHUD.showError(withStatus: "网络异常，请检查当前网络状态")
                     SVProgressHUD.dismiss(withDelay: 1)
                 }

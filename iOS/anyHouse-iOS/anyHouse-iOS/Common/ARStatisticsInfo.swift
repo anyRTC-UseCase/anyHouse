@@ -110,6 +110,16 @@ class ARMicModel: NSObject {
     }
 }
 
+class ARReportItem: NSObject {
+    var title: String?
+    var isSelected: Bool = false
+    
+    init(text: String, selected: Bool) {
+        title = text
+        isSelected = selected
+    }
+}
+
 extension NSObject {
     func login(userName: String) {
         //登录
@@ -127,9 +137,9 @@ extension NSObject {
                 guard let navVc = storyboard.instantiateViewController(withIdentifier: "anyHouse_Main") as? UINavigationController else { return }
                 UIApplication.shared.keyWindow?.rootViewController = navVc
             }
-            SVProgressHUD.dismiss(withDelay: 1)
+            SVProgressHUD.dismiss(withDelay: 0.5)
         }) { (error) in
-            SVProgressHUD.dismiss(withDelay: 1)
+            SVProgressHUD.dismiss(withDelay: 0.5)
         }
     }
     

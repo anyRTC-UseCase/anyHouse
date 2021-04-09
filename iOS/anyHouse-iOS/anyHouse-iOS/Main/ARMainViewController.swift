@@ -14,8 +14,12 @@ class ARMainViewController: UIViewController {
     @IBOutlet weak var avatarButton: UIButton!
     
     let identifier = "anyHouse_MainCellID"
+    /** 黑名单 **/
+    let blacklistIdentifier = "blacklistIdentifier"
     var index = 0
     var modelArr = [ARAudioRoomListModel]()
+    var blackList: NSMutableArray = NSMutableArray()
+    
     lazy var footerView: MJRefreshAutoGifFooter = {
         let footer = MJRefreshAutoGifFooter(refreshingBlock: {
               [weak self] () -> Void in
@@ -37,6 +41,9 @@ class ARMainViewController: UIViewController {
         // Do any additional setup after loading the view.
         let avatar = Int(UserDefaults.string(forKey: .avatar) ?? "1")! - 1
         avatarButton.setImage(UIImage(named: headListArr![avatar] as! String), for: .normal)
+        
+        let arr = UserDefaults.standard.array(forKey: blacklistIdentifier)
+        arr?.count ?? 0 > 0 ? (blackList.addObjects(from: arr!)) : nil
         
         tableView.tableFooterView = UIView()
         tableView.separatorStyle = .none
@@ -73,7 +80,10 @@ class ARMainViewController: UIViewController {
                 //其他人
                 let jsonList = result["data"]["list"].arrayValue
                 for json in jsonList {
-                    self?.modelArr.append(ARAudioRoomListModel(jsonData: json))
+                    let listModel = ARAudioRoomListModel(jsonData: json)
+                    if self?.blackList.contains(listModel.ownerUid as Any) == false {
+                        self?.modelArr.append(listModel)
+                    }
                 }
                 
                 (result["data"]["haveNext"] == 1) ? (self?.tableView.mj_footer = self?.footerView) : (self?.tableView.mj_footer = nil)
@@ -117,6 +127,28 @@ class ARMainViewController: UIViewController {
         tableView.mj_header?.endRefreshing()
         tableView.mj_footer?.endRefreshing()
     }
+    
+    private func setUserBlack(ownerUid: String) {
+        //拉黑
+        var arr = UserDefaults.standard.array(forKey: blacklistIdentifier)
+        if arr?.count ?? 0 > 0 {
+            arr?.append(ownerUid as Any)
+        } else {
+            arr = [ownerUid as Any]
+        }
+        UserDefaults.standard.setValue(arr, forKey: blacklistIdentifier)
+        
+        for index in 0..<modelArr.count {
+            let micModel = modelArr[index]
+            if micModel.ownerUid == ownerUid {
+                modelArr.remove(at: index)
+                modelArr.count == 0 ? (createPlaceholder()) : nil
+                tableView.reloadData()
+                break
+            }
+        }
+        blackList.add(ownerUid)
+    }
 }
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
@@ -129,7 +161,15 @@ extension ARMainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? ARMainTableViewCell
         cell?.selectionStyle = .none
-        cell?.listModel = modelArr[indexPath.row]
+        let mainModel = modelArr[indexPath.row]
+        cell?.listModel = mainModel
+        cell?.onButtonTapped = { [weak self]() in
+            UIAlertController.showAlert(in: self!, withTitle: "屏蔽", message: "屏蔽该用户", cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["确定"]) { (alertVc, action, index) in
+                if index == 2 {
+                    self!.setUserBlack(ownerUid: mainModel.ownerUid!)
+                }
+            }
+        }
         return cell!
     }
     

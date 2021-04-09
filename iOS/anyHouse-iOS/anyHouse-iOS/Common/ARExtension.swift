@@ -169,6 +169,12 @@ extension NSObject {
         return text!.isEmpty
     }
     
+    // 判断字符串是否全是空格 true 全是空格
+    func stringAllIsEmpty(string: String) -> Bool {
+        let trimmedStr = string.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmedStr.isEmpty
+    }
+    
     //取值
     func getAttributeValue(text: String?) -> String! {
         if text == nil || isBlank(text: text){
