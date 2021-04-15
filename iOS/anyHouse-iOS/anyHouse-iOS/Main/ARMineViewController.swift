@@ -15,6 +15,7 @@ struct MenuItem {
 }
 
 class ARMineViewController: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     
     private let identifier0 = "anyHouse_MineCellID0"
