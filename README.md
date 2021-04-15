@@ -61,7 +61,7 @@ anyHouse 示例项目支持以下平台和版本：
 
 - [Android 目录说明](https://github.com/anyRTC-UseCase/anyHouse/tree/master/Android/AnyHouse)
 
-- iOS 目录说明~在飞速开发中
+- [iOS 目录说明](https://github.com/anyRTC-UseCase/anyHouse/tree/master/iOS/anyHouse-iOS)
 
 ### 反馈与建议
 
