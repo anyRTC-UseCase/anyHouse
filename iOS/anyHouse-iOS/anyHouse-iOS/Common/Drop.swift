@@ -33,7 +33,7 @@ public enum DropState: DropStatable {
     
     public var font: UIFont? {
         switch self {
-        default: return UIFont.systemFont(ofSize: 17.0)
+        default: return UIFont.systemFont(ofSize: 14.0)
         }
     }
     
@@ -271,7 +271,7 @@ extension Drop {
         let statusLabel = UILabel(frame: CGRect.zero)
         statusLabel.translatesAutoresizingMaskIntoConstraints = false
         statusLabel.numberOfLines = 0
-        statusLabel.font = state.font ?? UIFont.systemFont(ofSize: 17.0)
+        statusLabel.font = state.font ?? UIFont.systemFont(ofSize: 14.0)
         statusLabel.textAlignment = state.textAlignment ?? .center
         statusLabel.text = status
         statusLabel.textColor = state.textColor ?? .white

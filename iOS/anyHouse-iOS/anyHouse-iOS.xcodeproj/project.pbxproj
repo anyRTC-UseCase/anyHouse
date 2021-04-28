@@ -10,6 +10,7 @@
 		63101D042610AE2C00561EB9 /* Drop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63101D032610AE2C00561EB9 /* Drop.swift */; };
 		63101D082611A70400561EB9 /* ARAudioViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63101D072611A70400561EB9 /* ARAudioViewCell.swift */; };
 		635882742609EB7000691578 /* ARMineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635882732609EB7000691578 /* ARMineViewController.swift */; };
+		63ADFD19261F0AF6000240F0 /* ARReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63ADFD18261F0AF6000240F0 /* ARReportViewController.swift */; };
 		63B35D15260B15230059019C /* ARAudioViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B35D14260B15230059019C /* ARAudioViewController.swift */; };
 		63B35D22260B56470059019C /* ARMicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B35D21260B56470059019C /* ARMicViewController.swift */; };
 		63B35D77260D8F110059019C /* ARPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B35D76260D8F110059019C /* ARPlaceholderView.swift */; };
@@ -45,6 +46,7 @@
 		63101D032610AE2C00561EB9 /* Drop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Drop.swift; sourceTree = "<group>"; };
 		63101D072611A70400561EB9 /* ARAudioViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARAudioViewCell.swift; sourceTree = "<group>"; };
 		635882732609EB7000691578 /* ARMineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMineViewController.swift; sourceTree = "<group>"; };
+		63ADFD18261F0AF6000240F0 /* ARReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARReportViewController.swift; sourceTree = "<group>"; };
 		63B35D14260B15230059019C /* ARAudioViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARAudioViewController.swift; sourceTree = "<group>"; };
 		63B35D21260B56470059019C /* ARMicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMicViewController.swift; sourceTree = "<group>"; };
 		63B35D76260D8F110059019C /* ARPlaceholderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ARPlaceholderView.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			children = (
 				63B35D14260B15230059019C /* ARAudioViewController.swift */,
 				63B35D21260B56470059019C /* ARMicViewController.swift */,
+				63ADFD18261F0AF6000240F0 /* ARReportViewController.swift */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -283,6 +286,7 @@
 				63B35D22260B56470059019C /* ARMicViewController.swift in Sources */,
 				635882742609EB7000691578 /* ARMineViewController.swift in Sources */,
 				63101D042610AE2C00561EB9 /* Drop.swift in Sources */,
+				63ADFD19261F0AF6000240F0 /* ARReportViewController.swift in Sources */,
 				63DAB67D26088E1000EE8B02 /* ARExtension.swift in Sources */,
 				63DAB6AF2608918B00EE8B02 /* ARCreateRoomViewController.swift in Sources */,
 			);
@@ -433,8 +437,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5543CP4MRT;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/anyHouse-iOS",
@@ -445,9 +452,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ar.anyhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "anyHouse-iOS/Common/Category/anyHouse-iOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -462,8 +470,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5543CP4MRT;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/anyHouse-iOS",
@@ -474,9 +485,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ar.anyhouse;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "anyHouse-iOS/Common/Category/anyHouse-iOS-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

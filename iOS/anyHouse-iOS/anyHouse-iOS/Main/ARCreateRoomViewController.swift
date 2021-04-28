@@ -47,8 +47,10 @@ class ARCreateRoomViewController: UIViewController {
         let cancelAction =  UIAlertAction (title:  "取消" , style: .cancel , handler:  nil )
         let okAction =  UIAlertAction (title:  "设置话题" , style: . default , handler: {
                 action  in
-            self.topic = alertVc.textView.text ?? ""
-            self.updateTopic()
+            if !self.stringAllIsEmpty(string: alertVc.textView.text) {
+                self.topic = alertVc.textView.text ?? ""
+                self.updateTopic()
+            }
         })
         alertVc.addAction(cancelAction)
         alertVc.addAction(okAction)
@@ -110,7 +112,7 @@ class ARCreateRoomViewController: UIViewController {
                     UIApplication.shared.keyWindow?.rootViewController?.children.last?.navigationController?.pushViewController(audioVc, animated: true)
                 })
             }
-            SVProgressHUD.dismiss(withDelay: 0.8)
+            SVProgressHUD.dismiss(withDelay: 0.5)
         }) { (error) in
             
         }

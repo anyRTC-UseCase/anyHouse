@@ -15,6 +15,7 @@ struct MenuItem {
 }
 
 class ARMineViewController: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     
     private let identifier0 = "anyHouse_MineCellID0"
@@ -36,7 +37,7 @@ class ARMineViewController: UIViewController {
          MenuItem(name: "免责声明", icon: "icon_arrow"),
          MenuItem(name: "注册开发者账号", icon: "icon_arrow")],
         
-        [MenuItem(name: "发版时间", detail: "2021-04-02"),
+        [MenuItem(name: "发版时间", detail: "2021-04-10"),
          MenuItem(name: "SDK版本", detail:  String(format: "v %@", ARtcEngineKit.getSdkVersion())),
          MenuItem(name: "软件版本", detail: String(format: "v %@", Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! CVarArg))]
     ]
@@ -62,18 +63,23 @@ class ARMineViewController: UIViewController {
     
     @objc func saveNickname(nickName: String!) {
         if nickName != UserDefaults.string(forKey: .userName) {
-            UserDefaults.set(value: nickName! , forKey: .userName)
-            //修改昵称
-            let parameters : NSDictionary = [ "userName": nickName as Any]
-            ARNetWorkHepler.getResponseData("updateUserName", parameters: parameters as? [String : AnyObject], headers: true, success: {[weak self](result) in
-                if result["code"] == 0 {
-                    self?.menus[0][1].detail = nickName
-                    self?.tableView.reloadData()
-                    SVProgressHUD.showSuccess(withStatus: "修改昵称成功")
-                    SVProgressHUD.dismiss(withDelay: 0.5)
+            if stringAllIsEmpty(string: nickName) {
+                SVProgressHUD.showError(withStatus: "昵称不能为空")
+                SVProgressHUD.dismiss(withDelay: 0.5)
+            } else {
+                UserDefaults.set(value: nickName! , forKey: .userName)
+                //修改昵称
+                let parameters : NSDictionary = ["userName": nickName as Any]
+                ARNetWorkHepler.getResponseData("updateUserName", parameters: parameters as? [String : AnyObject], headers: true, success: {[weak self](result) in
+                    if result["code"] == 0 {
+                        self?.menus[0][1].detail = nickName
+                        self?.tableView.reloadData()
+                        SVProgressHUD.showSuccess(withStatus: "修改昵称成功")
+                        SVProgressHUD.dismiss(withDelay: 0.5)
+                    }
+                }) { (error) in
+                    
                 }
-            }) { (error) in
-                
             }
         }
     }

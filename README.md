@@ -1,16 +1,16 @@
-## 高仿 CloubHouse
+## 高仿 ClubHouse
 
-> 本文将介绍目前市面上比较流行的音频沙龙应用场景，并讲述基于 anyRTC  SDK,模仿 CloubHouse 的步骤。
+> 本文将介绍目前市面上比较流行的音频沙龙应用场景，并讲述基于 anyRTC  SDK,模仿 ClubHouse 的步骤。
 
 
 
-近几年，语音社交产品也算是频频进入大家的视野，像早期的 YY，近期的 CloubHouse。语音聊天在泛娱乐社交行业中有着重要的地位，行业中很多佼佼者也都为用户提供了语音聊天室。有些语聊的应用中除了群聊社交之外还有带玩、叫醒服务、知识付费等。
+近几年，语音社交产品也算是频频进入大家的视野，像早期的 YY，近期的 ClubHouse。语音聊天在泛娱乐社交行业中有着重要的地位，行业中很多佼佼者也都为用户提供了语音聊天室。有些语聊的应用中除了群聊社交之外还有带玩、叫醒服务、知识付费等。
 
 看似简单的应用，有些优质的语音社交平台能达到每月1亿的流水，当下语聊市场已经被资本疯狂炒作，如何能够站在风口处，成为了当下热聊的话题。
 
 ### Demo 体验
 ![扫码体验](https://img-blog.csdnimg.cn/20210324210525628.png)
-### 精仿的效果
+### 高仿的效果
 ![](https://img-blog.csdnimg.cn/20210324220732224.jpeg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p6dXp6bA==,size_16,color_FFFFFF,t_70)
 
 
@@ -61,7 +61,7 @@ anyHouse 示例项目支持以下平台和版本：
 
 - [Android 目录说明](https://github.com/anyRTC-UseCase/anyHouse/tree/master/Android/AnyHouse)
 
-- iOS 目录说明~在飞速开发中
+- [iOS 目录说明](https://github.com/anyRTC-UseCase/anyHouse/tree/master/iOS/anyHouse-iOS)
 
 ### 反馈与建议
 

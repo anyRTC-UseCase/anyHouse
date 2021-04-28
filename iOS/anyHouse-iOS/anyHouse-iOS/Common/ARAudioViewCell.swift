@@ -14,6 +14,9 @@ class ARMainTableViewCell: UITableViewCell {
     @IBOutlet weak var imageView1: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak var blackButton: UIButton!
+    
+    var onButtonTapped : (() -> Void)? = nil
     
     var listModel: ARAudioRoomListModel? {
         didSet {
@@ -51,25 +54,19 @@ class ARMainTableViewCell: UITableViewCell {
             numberLabel.attributed.text = .init("""
                 \(listModel?.userTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_user"), .custom(.center, size: CGSize.init(width: 24, height: 24))))  \(listModel?.speakerTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_speakers"), .custom(.center, size: CGSize.init(width: 24, height: 24))))
             """)
+            blackButton.isHidden = (listModel?.ownerUid == UserDefaults.string(forKey: .uid))
+        }
+    }
+    
+    @IBAction func didClickBlacklistButton(_ sender: Any) {
+        if let onButtonTapped = self.onButtonTapped {
+            onButtonTapped()
         }
     }
 }
 
-class ARAudioViewCell: UICollectionViewCell {
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var audioImageView: UIImageView!
-    
-    func updateCell(micModel: ARMicModel?, width: CGFloat) {
-        let avatar = (micModel?.avatar ?? 1) - 1
-        avatarImageView.image = UIImage(named: headListArr![avatar] as! String)
-        nameLabel.text = micModel?.userName
-        audioImageView.isHidden = (micModel?.enableAudio != 0)
-        avatarImageView.layer.cornerRadius = (width - 24)/2
-    }
-}
-
 class ARAudioCollectionReusableView: UICollectionReusableView {
+    
     @IBOutlet weak var titleLabel: UILabel!
     
     func update(section: NSInteger, model: ARRoomInfoModel?) {
@@ -95,6 +92,7 @@ class ARAudioCollectionReusableView: UICollectionReusableView {
 }
 
 class ARMicCell: UITableViewCell {
+    
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var invitationButton: UIButton!
@@ -135,6 +133,116 @@ class ARGeneralTableViewCell: UITableViewCell {
             frame.origin.x += 15
             frame.size.width -= 2 * 15
             super.frame = frame
+        }
+    }
+}
+
+class ARAudioViewCell: UICollectionViewCell {
+    
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var audioImageView: UIImageView!
+    
+    private let radarAnimation = "radarAnimation"
+
+    private var animationLayer: CALayer?
+    private var animationGroup: CAAnimationGroup?
+    private var isAnimation: Bool = false
+    
+    func updateCell(micModel: ARMicModel?, width: CGFloat, broadcaster: Bool) {
+        let avatar = (micModel?.avatar ?? 1) - 1
+        avatarImageView.image = UIImage(named: headListArr![avatar] as! String)
+        audioImageView.isHidden = (micModel?.enableAudio != 0)
+        avatarImageView.layer.cornerRadius = (width - 24)/2
+        animationLayer?.removeAnimation(forKey: radarAnimation)
+        if broadcaster {
+            nameLabel.attributed.text = .init("""
+            \(.image(#imageLiteral(resourceName: "icon_broadcaster"), .custom(.center, size: .init(width: 20, height: 20)))) \(micModel?.userName ?? "")
+            """)
+        } else {
+            nameLabel.text = micModel?.userName
+        }
+    }
+    
+    func startAnimation() {
+        if !isAnimation {
+            animationLayer?.removeAnimation(forKey: radarAnimation)
+            let second = makeRadarAnimation(showRect: avatarImageView.frame, isRound: false)
+            contentView.layer.insertSublayer(second, below: avatarImageView.layer)
+        }
+    }
+    
+    private func makeRadarAnimation(showRect: CGRect, isRound: Bool) -> CALayer {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.frame = showRect
+        if isRound {
+            shapeLayer.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: showRect.width, height: showRect.height)).cgPath
+        } else {
+            shapeLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: showRect.width, height: showRect.height), cornerRadius: (avatarImageView.width - 9)/2).cgPath
+        }
+
+        shapeLayer.fillColor = UIColor(hexString: "#CEBD7A").cgColor
+        shapeLayer.opacity = 0.0
+
+        animationLayer = shapeLayer
+
+        let replicator = CAReplicatorLayer()
+        replicator.frame = shapeLayer.bounds
+        replicator.instanceCount = 4
+        replicator.instanceDelay = 1.0
+        replicator.addSublayer(shapeLayer)
+
+        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnimation.fromValue = NSNumber(floatLiteral: 1.0)
+        opacityAnimation.toValue = NSNumber(floatLiteral: 0)
+
+        let scaleAnimation = CABasicAnimation(keyPath: "transform")
+        if isRound {
+            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 0, 0, 0))
+        } else {
+            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.0, 1.0, 0))
+        }
+        scaleAnimation.toValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.3, 1.3, 0))
+
+        let animationGroup = CAAnimationGroup()
+        animationGroup.animations = [opacityAnimation, scaleAnimation]
+        animationGroup.duration = 1.0
+        animationGroup.repeatCount = 1
+        animationGroup.autoreverses = false
+        animationGroup.delegate = self
+
+        self.animationGroup = animationGroup
+
+        shapeLayer.add(animationGroup, forKey: radarAnimation)
+
+        return replicator
+    }
+    
+    func animationDidStart(_ anim: CAAnimation) {
+        isAnimation = true
+    }
+    
+    override func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        isAnimation = false
+    }
+}
+
+class ARReportCollectionViewCell: UICollectionViewCell {
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    var menuItem: ARReportItem? {
+        didSet {
+            titleLabel.text = menuItem?.title;
+            if menuItem!.isSelected {
+                titleLabel.layer.borderColor = UIColor(hexString: "#E75D5A").cgColor
+                titleLabel.font = UIFont(name: "PingFangSC-Semibold", size: 12)
+                titleLabel.textColor = UIColor(hexString: "#E75D5A")
+            } else {
+                titleLabel.layer.borderColor = UIColor(hexString: "#F1EFE5").cgColor
+                titleLabel.font = UIFont.init(name: "PingFang SC", size: 14)
+                titleLabel.textColor = UIColor(hexString: "#999999")
+            }
         }
     }
 }
