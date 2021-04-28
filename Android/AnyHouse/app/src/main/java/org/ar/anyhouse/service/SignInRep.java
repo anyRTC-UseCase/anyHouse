@@ -8,6 +8,7 @@ public class SignInRep {
      * msg : success.
      * data : {"uid":"105812","userToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDc1NzE2NzUsImlhdCI6MTYxNjAzNTY3NSwidXNlcmlkIjoiMTA1ODEyIn0.3KnjSnyumSzwCh1vrUybqkbdMjjDHKb5hUpy2XtPjhg","userName":"liuxiaozhong","avatar":9,"appId":"2b332bf9b59c3f94b08b374a984b4c14"}
      */
+    //{"code":0,"msg":"success.","data":{"uid":"596453","userToken":"/CHzHXCPrcAR0N2QA6aJyuuqXYCRvy0VXHNEfn4tTyuM1nxqVD+faRymPjLFK1IC","userName":"。。","avatar":5,"appId":"5abe7249f6022d1587749d6f3bbbf975"}}
 
     private int code;
     private String msg;

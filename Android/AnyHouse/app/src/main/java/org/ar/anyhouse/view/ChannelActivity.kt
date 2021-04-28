@@ -114,7 +114,6 @@ class ChannelActivity : BaseActivity() {
             })
             channelVM.observeHostStatus.observe(this, Observer {
                 binding.tvHostLeave.visibility = if (it!=0){View.VISIBLE}else{View.GONE}
-
             })
         }
 
@@ -270,9 +269,9 @@ class ChannelActivity : BaseActivity() {
     fun raisedHands(view: View) {
         if (channelVM.isHostOnline()) {
             if (view.isSelected) {
-                channelVM.cancleApplyLine()
+                channelVM.cancleRaiseHand()
             } else {
-                channelVM.applyLine()
+                channelVM.raiseHand()
                 TopTipDialog().showDialog(
                     supportFragmentManager,
                     getString(R.string.raisedHandsTip)

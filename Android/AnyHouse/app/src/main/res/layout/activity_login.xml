@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,25 +12,29 @@
     android:orientation="vertical">
 
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_150">
-    </Space>
 
     <TextView
+        android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/welcome"
+        android:layout_marginTop="@dimen/dp_150"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:textColor="@color/font_color"
-        android:textSize="@dimen/sp_25"></TextView>
+        android:textSize="@dimen/sp_25"
+       ></TextView>
 
     <TextView
+        android:id="@+id/tv_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_24"
         android:text="@string/input_name"
         android:textColor="@color/font_color"
         android:textSize="@dimen/sp_15"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_welcome"
         ></TextView>
 
     <EditText
@@ -42,6 +46,8 @@
         android:textSize="@dimen/sp_16"
         android:maxLength="8"
         android:singleLine="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tip"
         android:textColor="@color/font_color"
         android:textColorHint="@color/hint_color"
         android:layout_marginTop="@dimen/dp_24"
@@ -50,15 +56,15 @@
 
     <Button
         android:id="@+id/btn_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_30"
-        android:textColor="@color/app_color"
+        android:background="@drawable/select_btn_login"
         android:text="@string/login"
-        android:layout_marginTop="@dimen/dp_40"
-        android:background="@drawable/select_btn_login"></Button>
+        android:onClick="Login"
+        android:textColor="@color/app_color"
+        android:layout_marginTop="@dimen/dp_24"></Button>
 
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

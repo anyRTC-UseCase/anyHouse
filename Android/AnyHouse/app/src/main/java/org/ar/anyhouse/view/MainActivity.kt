@@ -2,6 +2,7 @@ package org.ar.anyhouse.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -17,10 +18,7 @@ import org.ar.anyhouse.databinding.ActivityMainBinding
 import org.ar.anyhouse.sdk.RtcManager
 import org.ar.anyhouse.sdk.RtmManager
 import org.ar.anyhouse.service.ServiceManager
-import org.ar.anyhouse.utils.Constans
-import org.ar.anyhouse.utils.clickWithTrigger
-import org.ar.anyhouse.utils.launch
-import org.ar.anyhouse.utils.toast
+import org.ar.anyhouse.utils.*
 import org.ar.anyhouse.vm.ChannelListDiffCallback
 import org.ar.anyhouse.vm.ErrorType
 import org.ar.anyhouse.vm.MainVM
@@ -28,7 +26,6 @@ import org.ar.anyhouse.weight.CreateChannelPop
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.exitProcess
-
 class MainActivity : BaseActivity() {
 
     private val mainVM: MainVM by viewModels()
@@ -104,11 +101,11 @@ class MainActivity : BaseActivity() {
         })
 
 
-        binding.llUser.setOnClickListener {
+        binding.group.setAllOnClickListener(View.OnClickListener {
             startActivity(Intent().apply {
                 setClass(this@MainActivity, SettingActivity::class.java)
             })
-        }
+        })
 
         binding.btnCreate.clickWithTrigger {
             XPopup.Builder(this@MainActivity).enableDrag(true).isDestroyOnDismiss(true).asCustom(CreateChannelPop(this@MainActivity, mainVM)).show()
@@ -135,6 +132,7 @@ class MainActivity : BaseActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = channelListAdapter
         }
+
         channelListAdapter.setEmptyView(R.layout.lauoyt_empty_room_list)
         channelListAdapter.setDiffCallback(ChannelListDiffCallback())
         channelListAdapter.setOnItemClickListener { adapter, view, position ->
@@ -174,12 +172,9 @@ class MainActivity : BaseActivity() {
                 .permission(Permission.WRITE_EXTERNAL_STORAGE, Permission.RECORD_AUDIO)
                 .onGranted { _: List<String?>? ->
                     it.resume(true)
-                }
-                .onDenied { _: List<String?>? ->
+                }.onDenied { _: List<String?>? ->
                     it.resume(false)
-
-                }
-                .start()
+                }.start()
     }
 
     private fun showPwdInputDialog(roomId: String,password:String) {

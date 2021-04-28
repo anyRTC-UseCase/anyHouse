@@ -14,10 +14,9 @@ import org.json.JSONObject
 class RtcManager private constructor(){
 
     private var rtcEngine : RtcEngine? =null
-    
     private var rtcListener : RtcListener? =null
 
-
+    //初始化SDK
     fun init(context: Context){
         val appId = SpUtil.get().getString(Constans.APP_ID,"")
         rtcEngine = RtcEngine.create(context, appId.toString(),RtcEvent())
@@ -29,15 +28,7 @@ class RtcManager private constructor(){
             }.toString())
         }
     }
-    
-    fun registerListener(rtcListener: RtcListener){
-        this.rtcListener=rtcListener
-    }
-    
-    fun unRegisterListener(){
-        this.rtcListener = null
-    }
-
+    //加入房间
     fun joinChannel(channelToken:String,channelId:String,userId:String,role: Int){
         rtcEngine?.let {
             it.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
@@ -50,33 +41,48 @@ class RtcManager private constructor(){
             it.joinChannel(channelToken,channelId,"",userId)
         }
     }
-
+    //设置为说话嘉宾
     fun changeRoleToSpeaker(){
         rtcEngine?.let {
             it.setClientRole(Constants.CLIENT_ROLE_BROADCASTER)
         }
     }
-
+    //设置为听众
     fun changeRoleToListener(){
         rtcEngine?.let {
             it.setClientRole(Constants.CLIENT_ROLE_AUDIENCE)
         }
     }
-
+    //离开频道
     fun leaveChannel(){
         rtcEngine?.let {
             it.leaveChannel()
         }
     }
-
+    //本地麦克风静音
     fun muteLocalAudio(mute:Boolean){
         rtcEngine?.let {
             it.muteLocalAudioStream(mute)
         }
     }
-
+    //销毁SDK
     fun release(){
         RtcEngine.destroy()
+    }
+
+    companion object {
+        val instance: RtcManager by lazy() {
+            RtcManager()
+        }
+    }
+
+
+    fun registerListener(rtcListener: RtcListener){
+        this.rtcListener=rtcListener
+    }
+
+    fun unRegisterListener(){
+        this.rtcListener = null
     }
 
     private inner class RtcEvent: IRtcEngineEventHandler() {
@@ -181,9 +187,5 @@ class RtcManager private constructor(){
 
     }
 
-    companion object {
-        val instance: RtcManager by lazy() {
-            RtcManager()
-        }
-    }
+
 }

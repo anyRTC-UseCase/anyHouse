@@ -5,14 +5,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
+import androidx.constraintlayout.widget.Group
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 import com.kongzue.dialog.v3.BottomMenu
 import kotlinx.coroutines.*
 import org.ar.anyhouse.App
+import org.json.JSONObject
 import rxhttp.wrapper.exception.HttpStatusCodeException
 import kotlin.coroutines.CoroutineContext
 import kotlin.math.roundToInt
@@ -42,6 +41,13 @@ inline fun <T> Boolean.ternary(trueValue: T, falseValue: T): T {
     }
 }
 
+fun ViewModel.json(vararg params:Pair<*,*>):String{
+   val map = mutableMapOf(*params)
+    params.forEach {
+        map[it.first] = it.second
+    }
+    return JSONObject(map).toString()
+}
 
 /**
  * 默认主线程的协程
@@ -166,5 +172,11 @@ private fun <T : View> T.clickEnable(): Boolean {
     }
     triggerLastTime = currentClickTime
     return flag
+}
+
+fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
+    referencedIds.forEach { id ->
+        rootView.findViewById<View>(id).setOnClickListener(listener)
+    }
 }
 

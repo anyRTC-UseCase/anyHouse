@@ -4,13 +4,18 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.ar.anyhouse.sdk.Role
 import org.ar.anyhouse.sdk.RtcListener
 import org.ar.anyhouse.sdk.RtmListener
 import org.ar.anyhouse.sdk.RtcManager
 import org.ar.anyhouse.sdk.RtmManager
 import org.ar.anyhouse.service.ServiceManager
+import org.ar.anyhouse.utils.json
 import org.ar.anyhouse.utils.launch
+import org.ar.anyhouse.utils.ternary
 import org.ar.rtc.Constants
 import org.ar.rtc.IRtcEngineEventHandler
 import org.ar.rtm.RtmChannelMember
@@ -95,10 +100,7 @@ class ChannelVM : ViewModel() {
                 }, channelInfo.value?.channelId.toString()
             )
             if (isMeHost()) {
-                val json = JSONObject().apply {
-                    put("action", BroadcastCMD.HOSTER_LEAVE)
-                }
-                RtmManager.instance.sendChannelMessage(json.toString())
+                RtmManager.instance.sendChannelMessage(json("action" to BroadcastCMD.HOSTER_LEAVE))
             }
             RtmManager.instance.unregisterListener()
             RtmManager.instance.unSubMember(getChannelHostId())
@@ -124,70 +126,52 @@ class ChannelVM : ViewModel() {
     }
 
 
-    fun applyLine() {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.RAISE_HANDS)
-            put("userName", getSelf()?.userName)
-            put("avatar", getSelf()?.userIcon)
-        }
-        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
+    //举手
+    fun raiseHand() {
+        val params = json("action" to BroadcastCMD.RAISE_HANDS,"userName" to getSelf()?.userName,"avatar" to getSelf()?.userIcon)
+        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), params)
         updateUserStatusFromHttp(getSelfId(), 1)
-
     }
 
-    fun cancleApplyLine() {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.CANCLE_RAISE_HANDS)
-        }
-        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
+    //取消举手
+    fun cancleRaiseHand() {
+        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json("action" to BroadcastCMD.CANCLE_RAISE_HANDS))
         updateUserStatusFromHttp(getSelfId(), 0)
 
     }
 
+    //邀请上台发言
     fun inviteLine(userId: String, needHttp: Boolean = false) {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.INVITE_SPEAK)
-        }
-        RtmManager.instance.sendPeerMessage(userId, json.toString())
+        RtmManager.instance.sendPeerMessage(userId, json("action" to BroadcastCMD.INVITE_SPEAK))
         updateInviteStatus(userId)
         if (needHttp) {
             updateUserStatusFromHttp(userId, -1)
         }
     }
 
+    //拒绝邀请
     fun rejectLine() {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.REJECT_INVITE)
-            put("userName", getSelf()?.userName)
-        }
-        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
+        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json("action" to BroadcastCMD.REJECT_INVITE,"userName" to getSelf()?.userName))
         updateUserStatusFromHttp(getSelfId(), 0)
         isInvited = false
     }
 
+    //同意邀请
     fun acceptLine() {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.ACCEPT_INVITE)
-        }
-        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json.toString())
+        RtmManager.instance.sendPeerMessage(channelInfo.value?.hostId.toString(), json("action" to BroadcastCMD.ACCEPT_INVITE))
         updateUserStatusFromHttp(getSelfId(), 2)
         isInvited = false
     }
 
 
     fun muteRemoteMic(userId: String) {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.CLOSER_MIC)
-        }
-        RtmManager.instance.sendPeerMessage(userId, json.toString())
+        RtmManager.instance.sendPeerMessage(userId, json("action" to BroadcastCMD.CLOSER_MIC))
     }
 
 
     fun changeRoleGuest(userId: String) {
-        val json = JSONObject().apply {
-            put("action", BroadcastCMD.ROLE_CHANGE_GUEST)
-        }
-        RtmManager.instance.sendPeerMessage(userId, json.toString())
+        RtmManager.instance.sendPeerMessage(userId, json("action" to BroadcastCMD.ROLE_CHANGE_GUEST))
+        updateUserStatusFromHttp(userId, 0)
     }
 
     //设置邀请状态 邀请过了就不再邀请了
@@ -234,12 +218,12 @@ class ChannelVM : ViewModel() {
 
     fun sendSelfInfo(){
         launch({
-            RtmManager.instance.sendChannelMessage(JSONObject().apply {
-                put("avatar", getSelf()?.userIcon)
-                put("userName", getSelf()?.userName)
-                put("userId", getSelf()?.userId)
-                put("action", BroadcastCMD.USER_INFO)
-            }.toString())
+            RtmManager.instance.sendChannelMessage(json(
+                "avatar" to getSelf()?.userIcon,
+                "userName" to getSelf()?.userName,
+                "userId" to getSelf()?.userId,
+                "action" to BroadcastCMD.USER_INFO
+            ))
         })
 
     }
@@ -260,8 +244,6 @@ class ChannelVM : ViewModel() {
             if (isMeHost()) {
                 getRaisedHandsListFormHttp()
             }
-
-
         })
     }
 
@@ -380,18 +362,17 @@ class ChannelVM : ViewModel() {
                 }
                 BroadcastCMD.USER_INFO -> {
                     launch({
-                        val userIcon = json.getInt("avatar")
-                        val userName = json.getString("userName")
-                        //val userId = json.getString("userId")
+                        val uIcon = json.getInt("avatar")
+                        val uName = json.getString("userName")
                         if (var2?.userId == getChannelHostId()){
-                            val speaker = Speaker.Factory.create(var2?.userId)
-                            speaker.userName = userName
-                            speaker.isHoster = true
-                            speaker.isOpenAudio = true
-                            speaker.userIcon =userIcon
-                            addSpeaker(speaker)
+                            addSpeaker(Speaker.Factory.create(var2.userId).apply {
+                                userName = uName
+                                isHoster = true
+                                isOpenAudio = true
+                                userIcon =uIcon
+                            })
                         }else{
-                            addListener(createListener(var2?.userId.toString(), userName, userIcon))
+                            addListener(createListener(var2?.userId.toString(), uName, uIcon))
                         }
 
                     })
@@ -482,12 +463,12 @@ class ChannelVM : ViewModel() {
     inner class RtcEvent : RtcListener() {
         override fun onJoinChannelSuccess(channel: String?, uid: String?, elapsed: Int) {
             if (isMeHost()) {
-                val speaker = Speaker.Factory.create(uid.toString())
-                speaker.isHoster = true
-                speaker.isOpenAudio = true
-                speaker.userName = getSelf()?.userName.toString()
-                speaker.userIcon = getSelf()?.userIcon!!
-                addSpeaker(speaker)
+                addSpeaker(Speaker.Factory.create(uid.toString()).apply {
+                    isHoster = true
+                    isOpenAudio = true
+                    userName = getSelf()?.userName.toString()
+                    userIcon = getSelf()?.userIcon!!
+                })
             }else{
                 subHostOnlineStatus()
             }
@@ -501,21 +482,12 @@ class ChannelVM : ViewModel() {
             //rtc的用户加入 listenerList
             launch({
                 val userRep = ServiceManager.instance.getUserInfo(uid.toString(), it).await()
-                if (userRep.code == 0) {
-                    val speaker = Speaker.Factory.create(uid.toString())
-                    speaker.isHoster = uid == getChannelHostId()
-                    speaker.userIcon = userRep.data.avatar
-                    speaker.userName = userRep.data.userName
-                    speaker.isOpenAudio = true
-                    addSpeaker(speaker)
-                } else {
-                    val speaker = Speaker.Factory.create(uid.toString())
-                    speaker.isHoster = uid == getChannelHostId()
-                    speaker.userIcon = 1
-                    speaker.userName = "未知"
-                    speaker.isOpenAudio = true
-                    addSpeaker(speaker)
-                }
+                    addSpeaker(Speaker.Factory.create(uid.toString()).apply {
+                        isHoster = uid == getChannelHostId()
+                        userIcon = (userRep.code == 0).ternary(userRep.data.avatar,1)
+                        userName = (userRep.code == 0).ternary(userRep.data.userName,"未知")
+                        isOpenAudio = true
+                    })
             })
 
         }
@@ -563,17 +535,16 @@ class ChannelVM : ViewModel() {
             observeMyRoleChange.value = newRole
             if (newRole == Constants.CLIENT_ROLE_BROADCASTER) {
                 removeListener(Listener.Factory.create(getSelf()?.userId.toString()))
-                val speaker = Speaker.Factory.create(getSelf()?.userId.toString())
-                speaker.isHoster = isMeHost()
-                speaker.isOpenAudio = true
-                speaker.userIcon = getSelf()?.userIcon!!
-                speaker.userName = getSelf()?.userName.toString()
-                addSpeaker(speaker)
+                addSpeaker(Speaker.Factory.create(getSelf()?.userId.toString()).apply {
+                    isHoster = isMeHost()
+                    isOpenAudio = true
+                    userIcon = getSelf()?.userIcon!!
+                    userName = getSelf()?.userName.toString()
+                })
             } else {
                 removeSpeaker(Speaker.Factory.create(getSelf()?.userId.toString()))
                 addListener(createListener())
                 observeMyRoleChange.value = Constants.CLIENT_ROLE_AUDIENCE //从主持人变游客
-                updateUserStatusFromHttp(getSelfId(), 0)
             }
 
 
@@ -681,7 +652,6 @@ class ChannelVM : ViewModel() {
     private fun removeSpeaker(speaker: Speaker) {
         if (speakerList.contains(speaker)) {
             speakerList.remove(speaker)
-            Log.d("哈哈哈哈哈","removeSpeaker ${speaker.userName}")
         }
         observerSpeakList.value = getAllSpeaker()
     }
@@ -724,7 +694,6 @@ class ChannelVM : ViewModel() {
     }
 
     private fun updateLocalAudioState(mute: Boolean) {
-
         speakerList.find { it.userId == getSelf()?.userId.toString() }?.let {
             it.isOpenAudio = !mute
             observerSpeakList.value = getAllSpeaker()

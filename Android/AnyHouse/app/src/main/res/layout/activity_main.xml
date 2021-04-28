@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,37 +7,36 @@
     android:background="@color/app_color"
     tools:context=".view.MainActivity">
 
-        <LinearLayout
-            android:id="@+id/ll_user"
+        <TextView
+            android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/font_color"
-                    android:textSize="@dimen/sp_14"
-                    android:layout_marginRight="@dimen/dp_8"
-                    android:text="这是用户名"></TextView>
-                <org.ar.anyhouse.weight.SquircleImageView
-                    android:id="@+id/iv_user"
-                    android:layout_width="@dimen/dp_32"
-                    android:layout_height="@dimen/dp_32"
-                    android:src="@drawable/a"
-                    android:layout_marginTop="@dimen/dp_15"
-                    android:layout_marginBottom="@dimen/dp_15"
-                    android:layout_marginRight="@dimen/dp_15"></org.ar.anyhouse.weight.SquircleImageView>
-        </LinearLayout>
-
+            android:textColor="@color/font_color"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintTop_toTopOf="@+id/iv_user"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_user"
+            app:layout_constraintRight_toLeftOf="@+id/iv_user"
+            android:layout_marginRight="@dimen/dp_8"
+            android:text="这是用户名"></TextView>
+        <org.ar.anyhouse.weight.SquircleImageView
+            android:id="@+id/iv_user"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:src="@drawable/a"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"></org.ar.anyhouse.weight.SquircleImageView>
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
             android:id="@+id/refreshLayout"
-            android:layout_below="@+id/ll_user"
-            android:layout_height="match_parent">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_user"
+            android:layout_height="0dp">
                 <com.scwang.smart.refresh.header.ClassicsHeader
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -54,24 +53,25 @@
                     android:layout_height="wrap_content"
                     ></com.scwang.smart.refresh.footer.ClassicsFooter>
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_60"
-            android:visibility="gone"
-            android:background="@drawable/shape_home_bottom"
-            android:layout_alignParentBottom="true"></View>
-
         <Button
             android:id="@+id/btn_create"
             android:layout_width="@dimen/dp_160"
             android:layout_height="@dimen/dp_40"
             android:textColor="@color/white"
             android:text="+ 创建房间"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/shape_btn_create"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/dp_30"></Button>
-</RelativeLayout>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="iv_user,tv_user_name"
+            >
+        </androidx.constraintlayout.widget.Group>
+</androidx.constraintlayout.widget.ConstraintLayout>
