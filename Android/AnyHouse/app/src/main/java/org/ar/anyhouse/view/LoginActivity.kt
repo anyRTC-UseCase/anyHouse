@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -16,6 +17,7 @@ import org.ar.anyhouse.utils.Constans
 import org.ar.anyhouse.utils.SpUtil
 import org.ar.anyhouse.utils.launch
 import org.ar.anyhouse.utils.toast
+import org.ar.anyhouse.vm.Listener
 import org.ar.anyhouse.vm.LoginVM
 import org.ar.rtm.ErrorInfo
 import org.ar.rtm.ResultCallback
@@ -31,7 +33,6 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         val userId = SpUtil.get().getString(Constans.USER_ID, "")
         if (!userId.isNullOrEmpty()) {//有userId 说明已经登录过了
             startActivity(Intent().apply {

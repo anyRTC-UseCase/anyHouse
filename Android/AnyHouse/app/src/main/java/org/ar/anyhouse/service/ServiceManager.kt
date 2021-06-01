@@ -1,6 +1,5 @@
 package org.ar.anyhouse.service
 
-import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import org.ar.anyhouse.BuildConfig
@@ -65,13 +64,14 @@ class ServiceManager private constructor(){
 
 
     fun leaveChannel(isOwner:Int,roomId:String){
-         RxHttp.postJson(Api.LEAVE_ROOM)
-                .add("isOwner",isOwner)
-                .add("roomId",roomId)
-                .asString()
-                .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe {
-                 }
+        launch({
+            RxHttp.postJson(Api.LEAVE_ROOM)
+                    .add("isOwner",isOwner)
+                    .add("roomId",roomId)
+                    .toStr().await()
+        })
+
+
     }
 
 

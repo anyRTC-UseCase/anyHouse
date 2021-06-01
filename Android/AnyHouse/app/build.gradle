@@ -15,20 +15,13 @@ android {
         applicationId "org.ar.anyhouse"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 28
-        versionName "1.1.1"
+        versionCode 29
+        versionName "1.1.2"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
             abiFilters "arm64-v8a"
-        }
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        rxhttp_rxjava: 'rxjava2'
-                ]
-            }
         }
     }
 
@@ -67,6 +60,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "androidx.activity:activity-ktx:1.2.0"
     implementation 'com.google.android.material:material:1.2.1'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -80,12 +75,9 @@ dependencies {
     implementation 'com.ljx.rxhttp:rxhttp:2.5.6'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     kapt 'com.ljx.rxhttp:rxhttp-compiler:2.5.6'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'com.ljx.rxlife2:rxlife-rxjava:2.0.0'
     implementation 'com.ljx.rxlife:rxlife-coroutine:2.0.1'
-    implementation 'io.anyrtc:rtc:4.2.0'
-    implementation 'io.anyrtc:rtm:1.0.2.1'
+    implementation 'io.anyrtc:rtc:4.2.1.1'
+    implementation 'io.anyrtc:rtm:1.0.2.2'
 
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头

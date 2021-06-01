@@ -33,7 +33,7 @@ class MainVM : ViewModel() {
 
     fun getRoomList(page:Int = pageNum){
         launch({
-            val channelListRep  = ServiceManager.instance.getChannelList(1,15,it).await()
+            val channelListRep  = ServiceManager.instance.getChannelList(pageNum,15,it).await()
             haveNext = channelListRep.data.haveNext
             observerRoomList.value=channelListRep
         },{

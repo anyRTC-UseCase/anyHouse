@@ -5,7 +5,7 @@ package org.ar.anyhouse.vm
 /**
  * 每个观众的信息
  */
-class Listener private constructor(val userId:String){
+open class Listener(val userId:String){
 
     var isOpenAudio : Boolean = false //是否打开了音频
     var userName : String = ""
