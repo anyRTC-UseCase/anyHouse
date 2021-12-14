@@ -5,36 +5,36 @@
 //  Created by 余生丶 on 2021/3/24.
 //
 
-import UIKit
-import SwiftyJSON
-import MJRefresh
 import ARtcKit
 import ARtmKit
+import MJRefresh
+import SwiftyJSON
+import UIKit
 
 private let reuseIdentifier = "anyHouse_CellID"
 private let leftPadding: CGFloat = 33.0
 private let itemSpacing: CGFloat = 24.0
 
 class ARAudioViewController: UIViewController {
-    
-    @IBOutlet weak var backView: UIView!
-    @IBOutlet weak var micButton: UIButton!
-    @IBOutlet weak var nameButton: UIButton!
-    @IBOutlet weak var listButton: UIButton!
-    @IBOutlet weak var audioButton: UIButton!
-    @IBOutlet weak var avatarButton: UIButton!
-    @IBOutlet weak var collectionView: ARCollectionView!
-    @IBOutlet weak var leftView: UIView!
-    @IBOutlet weak var dropConstraint: NSLayoutConstraint!
+    @IBOutlet var backView: UIView!
+    @IBOutlet var micButton: UIButton!
+    @IBOutlet var nameButton: UIButton!
+    @IBOutlet var listButton: UIButton!
+    @IBOutlet var audioButton: UIButton!
+    @IBOutlet var avatarButton: UIButton!
+    @IBOutlet var collectionView: ARCollectionView!
+    @IBOutlet var leftView: UIView!
+    @IBOutlet var dropConstraint: NSLayoutConstraint!
     
     private var flowLayout: UICollectionViewFlowLayout? = {
-        let layout = UICollectionViewFlowLayout.init()
+        let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: leftPadding, bottom: 0, right: leftPadding)
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 24
         layout.minimumInteritemSpacing = itemSpacing
         return layout
     }()
+
     /** 断线重连状态 **/
     var stateType: ARConnectionStateType?
     var infoModel: ARRoomInfoModel!
@@ -59,7 +59,7 @@ class ARAudioViewController: UIViewController {
     func initializeUI() {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         UIApplication.shared.isIdleTimerDisabled = true
-        backView.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
+        backView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         nameButton.setTitle(UserDefaults.string(forKey: .userName), for: .normal)
         let avatar = Int(UserDefaults.string(forKey: .avatar) ?? "1")! - 1
         avatarButton.setImage(UIImage(named: headListArr![avatar] as! String), for: .normal)
@@ -87,7 +87,7 @@ class ARAudioViewController: UIViewController {
         rtcKit = ARtcEngineKit.sharedEngine(withAppId: UserDefaults.string(forKey: .appId)!, delegate: self)
         rtcKit.setAudioProfile(.musicHighQuality, scenario: .gameStreaming)
         
-        //开启音频AI降噪
+        // 开启音频AI降噪
         let dic1: NSDictionary = ["Cmd": "SetAudioAiNoise", "Enable": 1]
         rtcKit.setParameters(getJSONStringFromDictionary(dictionary: dic1))
         
@@ -97,11 +97,11 @@ class ARAudioViewController: UIViewController {
         }
         rtcKit.enableAudioVolumeIndication(500, smooth: 3, report_vad: true)
         
-        //init ARtmKit
-        rtmEngine = ARtmKit.init(appId: UserDefaults.string(forKey: .appId)!, delegate: self)
-        rtmEngine.login(byToken: infoModel?.rtmToken, user: UserDefaults.string(forKey: .uid) ?? "0") { [weak self](errorCode) in
+        // init ARtmKit
+        rtmEngine = ARtmKit(appId: UserDefaults.string(forKey: .appId)!, delegate: self)
+        rtmEngine.login(byToken: infoModel?.rtmToken, user: UserDefaults.string(forKey: .uid) ?? "0") { [weak self] _ in
             self?.rtmChannel = self?.rtmEngine.createChannel(withId: (self?.infoModel?.roomId)!, delegate: self)
-            self?.rtmChannel?.join(completion: { (errorCode) in
+            self?.rtmChannel?.join(completion: { _ in
                 let dic: NSDictionary! = ["action": 9, "userName": UserDefaults.string(forKey: .userName) as Any, "avatar": Int(UserDefaults.string(forKey: .avatar) ?? "1")!]
                 self?.sendChannelMessage(text: (self?.getJSONStringFromDictionary(dictionary: dic))!)
             })
@@ -110,13 +110,13 @@ class ARAudioViewController: UIViewController {
     
     func joinChannel() {
         let uid = UserDefaults.string(forKey: .uid)
-        rtcKit.joinChannel(byToken: infoModel?.rtcToken, channelId: (infoModel?.roomId)!, uid: uid) { (channel, uid, elapsed) in
+        rtcKit.joinChannel(byToken: infoModel?.rtcToken, channelId: (infoModel?.roomId)!, uid: uid) { _, _, _ in
             print("joinChannel sucess")
         }
     }
     
     func leaveChannel() {
-        rtcKit.leaveChannel { (stats) in
+        rtcKit.leaveChannel { _ in
             print("leaveChannel")
         }
         
@@ -135,9 +135,9 @@ class ARAudioViewController: UIViewController {
         sender.isSelected.toggle()
         switch sender.tag {
         case 51:
-            //离开
+            // 离开
             if infoModel.isBroadcaster {
-                UIAlertController.showAlert(in: self, withTitle: "离开", message: "离开后所有人都将退出此房间", cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["离开"]) { [unowned self] (alertVc, action, index) in
+                UIAlertController.showAlert(in: self, withTitle: "离开", message: "离开后所有人都将退出此房间", cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["离开"]) { [unowned self] _, _, index in
                     if index == 2 {
                         self.leaveChannel()
                         self.popBack()
@@ -147,20 +147,18 @@ class ARAudioViewController: UIViewController {
                 leaveChannel()
                 popBack()
             }
-            break
         case 52:
-            //音频
+            // 音频
             rtcKit.enableLocalAudio(!sender.isSelected)
-            modelArr[0].forEach { (micModel) in
+            modelArr[0].forEach { micModel in
                 if micModel.uid == UserDefaults.string(forKey: .uid) {
                     micModel.enableAudio = sender.isSelected ? 0 : 1
                     collectionView.reloadSections(NSIndexSet(index: 0) as IndexSet)
                     return
                 }
             }
-            break
         case 53:
-            //举手
+            // 举手
             var dic: NSDictionary!
             if sender.isSelected {
                 dic = ["action": 1, "userName": UserDefaults.string(forKey: .userName) as Any, "avatar": Int(UserDefaults.string(forKey: .avatar) ?? "1")!]
@@ -171,16 +169,14 @@ class ARAudioViewController: UIViewController {
                 updateUserStatus(roomId: infoModel.roomId!, status: 0, uid: UserDefaults.string(forKey: .uid))
             }
             sendPeerMessage(uid: infoModel.ownerId!, dic: dic)
-            break
         case 54:
-            //拒绝
+            // 拒绝
             micButton.isSelected = false
             invitationedUserMic(down: false, left: false)
             sendPeerMessage(uid: infoModel.ownerId, dic: ["action": 3, "userName": UserDefaults.string(forKey: .userName) as Any])
             updateUserStatus(roomId: infoModel.roomId!, status: 0, uid: UserDefaults.string(forKey: .uid))
-            break
         case 55:
-            //同意
+            // 同意
             invitationedUserMic(down: false, left: false)
             becomBroadcaster(role: .broadcaster)
             sendPeerMessage(uid: infoModel.ownerId, dic: ["action": 4])
@@ -195,36 +191,35 @@ class ARAudioViewController: UIViewController {
                     break
                 }
             }
-            break
         default:
             break
         }
     }
     
     @objc func sendChannelMessage(text: String) {
-        let rtmMessage: ARtmMessage = ARtmMessage.init(text: text)
-        let options: ARtmSendMessageOptions = ARtmSendMessageOptions()
-        rtmChannel?.send(rtmMessage, sendMessageOptions: options) { (errorCode) in
+        let rtmMessage = ARtmMessage(text: text)
+        let options = ARtmSendMessageOptions()
+        rtmChannel?.send(rtmMessage, sendMessageOptions: options) { errorCode in
             print("Send Channel Message errorCode:\(errorCode.rawValue)")
         }
     }
     
     private func sendPeerMessage(uid: String!, dic: NSDictionary!) {
-        let message: ARtmMessage = ARtmMessage.init(text: getJSONStringFromDictionary(dictionary: dic))
-        rtmEngine.send(message, toPeer: uid, sendMessageOptions: ARtmSendMessageOptions()) { (errorCode) in
+        let message = ARtmMessage(text: getJSONStringFromDictionary(dictionary: dic))
+        rtmEngine.send(message, toPeer: uid, sendMessageOptions: ARtmSendMessageOptions()) { errorCode in
             print("sendPeerMessage errorCode:\(errorCode.rawValue)")
         }
     }
     
     func tokenExpire() {
         leaveChannel()
-        UIAlertController.showAlert(in: self, withTitle: "提示", message: "体验时间已到", cancelButtonTitle: nil, destructiveButtonTitle: nil, otherButtonTitles: ["确定"]) { [unowned self](alertVc, action, index) in
+        UIAlertController.showAlert(in: self, withTitle: "提示", message: "体验时间已到", cancelButtonTitle: nil, destructiveButtonTitle: nil, otherButtonTitles: ["确定"]) { [unowned self] _, _, _ in
             self.navigationController?.popToRootViewController(animated: true)
         }
     }
     
     func invitationedUserMic(down: Bool, left: Bool) {
-        //被邀请、主播离开
+        // 被邀请、主播离开
         leftView.isHidden = !left
         UIView.animate(withDuration: 0.2) {
             if left {
@@ -240,16 +235,16 @@ class ARAudioViewController: UIViewController {
     }
     
     @objc func invitationUserMic(nofi: Notification) {
-        //反向邀请 --- 主播
+        // 反向邀请 --- 主播
         let uid: String = nofi.userInfo!["uid"] as! String
         sendPeerMessage(uid: uid, dic: ["action": 2])
-        self.updateUserStatus(roomId: infoModel.roomId!, status: -1, uid: uid)
+        updateUserStatus(roomId: infoModel.roomId!, status: -1, uid: uid)
     }
     
     func getSpeakerList() {
-        //获取嘉宾列表
-        let parameters : NSDictionary = ["roomId": infoModel.roomId as Any]
-        ARNetWorkHepler.getResponseData("getSpeakerList", parameters: parameters as? [String : AnyObject], headers: true, success: { [weak self](result) in
+        // 获取嘉宾列表
+        let parameters: NSDictionary = ["roomId": infoModel.roomId as Any]
+        ARNetWorkHepler.getResponseData("getSpeakerList", parameters: parameters as? [String: AnyObject], headers: true, success: { [weak self] result in
             if result["code"] == 0 {
                 let jsonArr = result["data"].arrayValue
                 jsonArr.count > 0 ? self?.modelArr[0].removeAll() : nil
@@ -258,15 +253,14 @@ class ARAudioViewController: UIViewController {
                 }
             }
             self?.collectionView.reloadSections(NSIndexSet(index: 0) as IndexSet)
-        }) { (error) in
-            
+        }) { _ in
         }
     }
     
     func getListenerList() {
-        //获取听众列表
-        let parameters : NSDictionary = ["roomId": infoModel.roomId as Any]
-        ARNetWorkHepler.getResponseData("getListenerList", parameters: parameters as? [String : AnyObject], headers: true) { [weak self](result) in
+        // 获取听众列表
+        let parameters: NSDictionary = ["roomId": infoModel.roomId as Any]
+        ARNetWorkHepler.getResponseData("getListenerList", parameters: parameters as? [String: AnyObject], headers: true) { [weak self] result in
             if result["code"] == 0 {
                 let jsonArr = result["data"].arrayValue
                 jsonArr.count > 0 ? self?.modelArr[1].removeAll() : nil
@@ -276,41 +270,39 @@ class ARAudioViewController: UIViewController {
             }
             self?.collectionView.reloadSections(NSIndexSet(index: 1) as IndexSet)
             self?.collectionView.mj_header?.endRefreshing()
-        } error: { (error) in
+        } error: { _ in
             self.collectionView.mj_header?.endRefreshing()
         }
     }
     
     @objc private func getHandsUpList() {
-        //获取举手列表
-        let parameters : NSDictionary = ["roomId": infoModel.roomId as Any]
-        ARNetWorkHepler.getResponseData("getHandsUpList", parameters: parameters as? [String : AnyObject], headers: true, success: { [weak self](result) in
+        // 获取举手列表
+        let parameters: NSDictionary = ["roomId": infoModel.roomId as Any]
+        ARNetWorkHepler.getResponseData("getHandsUpList", parameters: parameters as? [String: AnyObject], headers: true, success: { [weak self] result in
             if result["code"] == 0 {
                 let jsonArr = result["data"].arrayValue
                 self?.listButton.isSelected = (jsonArr.count > 0) ? true : false
             }
-        }) { (error) in
-            
+        }) { _ in
         }
     }
     
     func getUserInfo(uid: String, section: NSInteger) {
-        //获取用户信息
-        let parameters : NSDictionary = ["uid": uid]
-        ARNetWorkHepler.getResponseData("getUserInfo", parameters: parameters as? [String : AnyObject], headers: true) { [weak self](result) in
+        // 获取用户信息
+        let parameters: NSDictionary = ["uid": uid]
+        ARNetWorkHepler.getResponseData("getUserInfo", parameters: parameters as? [String: AnyObject], headers: true) { [weak self] result in
             if result["code"] == 0 {
                 self?.modelArr[section].append(ARMicModel(jsonData: result["data"]))
             }
             self?.collectionView.reloadSections(NSIndexSet(index: section) as IndexSet)
-        } error: { (error) in
-
+        } error: { _ in
         }
     }
     
     private func becomBroadcaster(role: ARClientRole) {
         rtcKit.setClientRole(role)
         if role == .audience {
-            //下麦
+            // 下麦
             audioButton.isHidden = true
             audioButton.isSelected = false
             micButton.isHidden = false
@@ -328,7 +320,7 @@ class ARAudioViewController: UIViewController {
             }
             Drop.down("您已成为听众", state: .color(UIColor(hexString: "#4BAB63")), duration: 1)
         } else {
-            //上麦
+            // 上麦
             audioButton.isHidden = false
             micButton.isHidden = true
         }
@@ -338,8 +330,8 @@ class ARAudioViewController: UIViewController {
         let allSpacing = 2 * itemSpacing + CGFloat(section) * itemSpacing
         let length = ARScreenWidth - leftPadding * 2 - allSpacing
         let itemWidth = length / CGFloat(3 + section)
-        let itemHeight =  itemWidth + 49
-        return CGSize.init(width: itemWidth, height: itemHeight)
+        let itemHeight = itemWidth + 49
+        return CGSize(width: itemWidth, height: itemHeight)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -348,7 +340,8 @@ class ARAudioViewController: UIViewController {
         }
         
         if identifier == "ARMicViewController",
-            let vc = segue.destination as? ARMicViewController {
+           let vc = segue.destination as? ARMicViewController
+        {
             vc.roomId = infoModel.roomId
         }
     }
@@ -358,29 +351,29 @@ class ARAudioViewController: UIViewController {
     }
 }
 
-//MARK: - ARtcEngineDelegate
+// MARK: - ARtcEngineDelegate
 
 extension ARAudioViewController: ARtcEngineDelegate {
     func rtcEngine(_ engine: ARtcEngineKit, didOccurWarning warningCode: ARWarningCode) {
-        //发生警告回调
+        // 发生警告回调
         print(warningCode.rawValue)
     }
     
     func rtcEngine(_ engine: ARtcEngineKit, didOccurError errorCode: ARErrorCode) {
-        //发生错误回调
+        // 发生错误回调
         print(errorCode.rawValue)
     }
     
     func rtcEngine(_ engine: ARtcEngineKit, tokenPrivilegeWillExpire token: String) {
-        //Token 过期回调
+        // Token 过期回调
         tokenExpire()
     }
     
     func rtcEngine(_ engine: ARtcEngineKit, didJoinedOfUid uid: String, elapsed: Int) {
-        //远端用户/主播加入回调
-        (uid == infoModel.ownerId) ? (invitationedUserMic(down: false, left: true)) : nil
+        // 远端用户/主播加入回调
+        (uid == infoModel.ownerId) ? invitationedUserMic(down: false, left: true) : nil
         var exist = false
-        modelArr[0].forEach { (micModel) in
+        modelArr[0].forEach { micModel in
             if micModel.uid == uid {
                 exist = true
                 return
@@ -398,8 +391,8 @@ extension ARAudioViewController: ARtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: ARtcEngineKit, didOfflineOfUid uid: String, reason: ARUserOfflineReason) {
-        //远端用户（通信场景）/主播（互动场景）离开当前频道回调
-        (uid == infoModel.ownerId) ? (invitationedUserMic(down: true, left: true)) : nil
+        // 远端用户（通信场景）/主播（互动场景）离开当前频道回调
+        (uid == infoModel.ownerId) ? invitationedUserMic(down: true, left: true) : nil
         for index in 0..<modelArr[0].count {
             let micModel = modelArr[0][index]
             if micModel.uid == uid {
@@ -412,9 +405,9 @@ extension ARAudioViewController: ARtcEngineDelegate {
     }
     
     func rtcEngine(_ engine: ARtcEngineKit, remoteAudioStateChangedOfUid uid: String, state: ARAudioRemoteState, reason: ARAudioRemoteStateReason, elapsed: Int) {
-        //远端音频流状态发生改变回调
+        // 远端音频流状态发生改变回调
         if reason == .reasonRemoteMuted || reason == .reasonRemoteUnmuted {
-            modelArr[0].forEach { (micModel) in
+            modelArr[0].forEach { micModel in
                 if micModel.uid == uid {
                     micModel.enableAudio = (reason == .reasonRemoteMuted) ? 0 : 1
                     collectionView.reloadSections(NSIndexSet(index: 0) as IndexSet)
@@ -429,8 +422,8 @@ extension ARAudioViewController: ARtcEngineDelegate {
             if speakInfo.volume > 3 {
                 for index in 0..<modelArr[0].count {
                     let micModel = modelArr[0][index]
-                    if speakInfo.uid == micModel.uid || (speakInfo.uid == "0" && micModel.uid == UserDefaults.string(forKey: .uid)){
-                        let indexPath: NSIndexPath = NSIndexPath(row: index, section: 0)
+                    if speakInfo.uid == micModel.uid || (speakInfo.uid == "0" && micModel.uid == UserDefaults.string(forKey: .uid)) {
+                        let indexPath = NSIndexPath(row: index, section: 0)
                         let cell: ARAudioViewCell? = collectionView.cellForItem(at: indexPath as IndexPath) as? ARAudioViewCell
                         cell?.startAnimation()
                         break
@@ -455,28 +448,28 @@ extension ARAudioViewController: ARtcEngineDelegate {
     }
 }
 
-//MARK: - ARtmDelegate, ARtmChannelDelegate
+// MARK: - ARtmDelegate, ARtmChannelDelegate
 
 extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
     func rtmKit(_ kit: ARtmKit, messageReceived message: ARtmMessage, fromPeer peerId: String) {
-        //收到点对点消息回调
+        // 收到点对点消息回调
         let dic = getDictionaryFromJSONString(jsonString: message.text)
         let value: NSInteger? = dic.object(forKey: "action") as? NSInteger
         if value == 1 || value == 7 {
-            //1举手 7取消举手
+            // 1举手 7取消举手
             if topViewController() is ARMicViewController {
-                NotificationCenter.default.post(name: UIResponder.anyHouseNotificationRefreshHandsUpList, object: self, userInfo:nil)
+                NotificationCenter.default.post(name: UIResponder.anyHouseNotificationRefreshHandsUpList, object: self, userInfo: nil)
             }
             value == 1 ? listButton.isSelected = true : getHandsUpList()
         } else if value == 2 {
-            //邀请听众上台
+            // 邀请听众上台
             invitationedUserMic(down: true, left: false)
         } else if value == 3 {
-            //拒绝邀请
+            // 拒绝邀请
             Drop.down("\(dic.object(forKey: "userName") ?? "")拒绝邀请为嘉宾", state: .color(UIColor(hexString: "#FF3A30")), duration: 1.5)
             getHandsUpList()
         } else if value == 4 {
-            //同意邀请
+            // 同意邀请
             for index in 0..<modelArr[1].count {
                 let micModel = modelArr[1][index]
                 if micModel.uid == peerId {
@@ -487,10 +480,10 @@ extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
             }
             getHandsUpList()
         } else if value == 5 {
-            //主持人关闭该发言者的麦克风
+            // 主持人关闭该发言者的麦克风
             rtcKit.enableLocalAudio(false)
             audioButton.isSelected = true
-            modelArr[0].forEach { (micModel) in
+            modelArr[0].forEach { micModel in
                 if micModel.uid == UserDefaults.string(forKey: .uid) {
                     micModel.enableAudio = 0
                     collectionView.reloadSections(NSIndexSet(index: 0) as IndexSet)
@@ -498,13 +491,13 @@ extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
                 }
             }
         } else if value == 6 {
-            //主持人将该发言者设置为听众
+            // 主持人将该发言者设置为听众
             becomBroadcaster(role: .audience)
         }
     }
     
     func channel(_ channel: ARtmChannel, messageReceived message: ARtmMessage, from member: ARtmMember) {
-        //收到频道消息回调
+        // 收到频道消息回调
         let dic = getDictionaryFromJSONString(jsonString: message.text)
         let value: NSInteger? = dic.object(forKey: "action") as? NSInteger
         if value == 8 {
@@ -514,7 +507,7 @@ extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
             popBack()
         } else if value == 9 {
             var exist = false
-            modelArr[1].forEach { (model) in
+            modelArr[1].forEach { model in
                 if model.uid == member.uid {
                     exist = true
                     return
@@ -531,7 +524,7 @@ extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
     }
     
     func channel(_ channel: ARtmChannel, memberLeft member: ARtmMember) {
-        //频道成员离开频道回调
+        // 频道成员离开频道回调
         for index in 0..<modelArr[1].count {
             let micModel = modelArr[1][index]
             if micModel.uid == member.uid {
@@ -544,7 +537,7 @@ extension ARAudioViewController: ARtmDelegate, ARtmChannelDelegate {
     }
 }
 
-//MARK: - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
 
 extension ARAudioViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -581,7 +574,7 @@ extension ARAudioViewController: UICollectionViewDelegate, UICollectionViewDataS
             let size = headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width, height: UIView.layoutFittingExpandedSize.height), withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
             return size
         }
-        return CGSize.init(width: ARScreenWidth, height: 50)
+        return CGSize(width: ARScreenWidth, height: 50)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -589,30 +582,30 @@ extension ARAudioViewController: UICollectionViewDelegate, UICollectionViewDataS
         if indexPath.section == 0 {
             if infoModel.isBroadcaster {
                 if micModel.uid != UserDefaults.string(forKey: .uid) {
-                    let arr: NSMutableArray = ["关闭麦克风","设置为听众"]
+                    let arr: NSMutableArray = ["关闭麦克风", "设置为听众"]
                     (micModel.enableAudio == 0) ? (arr.removeObject(at: 0)) : nil
-                    UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: arr as? [Any], popoverPresentationControllerBlock: nil) { [unowned self](alertVc, action, index) in
+                    UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: arr as? [Any], popoverPresentationControllerBlock: nil) { [unowned self] _, _, index in
                         if arr.count == 2 && index == 2 {
-                            //关闭麦克风
+                            // 关闭麦克风
                             self.sendPeerMessage(uid: micModel.uid, dic: ["action": 5])
-                        } else if (arr.count == 2 && index == 3) || (arr.count == 1 && index == 2){
-                            //设置为观众
+                        } else if (arr.count == 2 && index == 3) || (arr.count == 1 && index == 2) {
+                            // 设置为观众
                             self.sendPeerMessage(uid: micModel.uid, dic: ["action": 6])
                             self.updateUserStatus(roomId: self.infoModel.roomId!, status: 0, uid: micModel.uid)
                         }
                     }
                 }
             } else if micModel.uid == UserDefaults.string(forKey: .uid) {
-                UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles:["下麦"], popoverPresentationControllerBlock: nil) { [unowned self](alertVc, action, index) in
+                UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["下麦"], popoverPresentationControllerBlock: nil) { [unowned self] _, _, index in
                     if index == 2 {
-                        //设置为观众
+                        // 设置为观众
                         self.becomBroadcaster(role: .audience)
                     }
                 }
             }
         } else {
             if infoModel.isBroadcaster {
-                UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["邀请上台发言"], popoverPresentationControllerBlock: nil) { [unowned self](alertVc, action, index) in
+                UIAlertController.showActionSheet(in: self, withTitle: nil, message: nil, cancelButtonTitle: "取消", destructiveButtonTitle: nil, otherButtonTitles: ["邀请上台发言"], popoverPresentationControllerBlock: nil) { [unowned self] _, _, index in
                     if index == 2 {
                         self.sendPeerMessage(uid: micModel.uid!, dic: ["action": 2])
                         self.updateUserStatus(roomId: infoModel.roomId!, status: -1, uid: micModel.uid)

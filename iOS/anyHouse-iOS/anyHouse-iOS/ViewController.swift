@@ -17,6 +17,7 @@ public var headListArr: NSArray? = {
 }()
 
 class ViewController: UIViewController {
+    
     @IBOutlet weak var createLabel: UILabel!
     @IBOutlet weak var tipLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!

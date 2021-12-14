@@ -3,9 +3,9 @@ use_frameworks!
 
 target 'anyHouse-iOS' do
     #anyRTC 音视频库
-    pod 'ARtcKit_iOS', '~> 4.1.4.1'
+    pod 'ARtcKit_iOS', '~> 4.2.2.6'
     #anyRTC 实时消息库
-    pod 'ARtmKit_iOS', '~> 1.0.1.5'
+    pod 'ARtmKit_iOS', '~> 1.0.1.7'
     
     pod 'SnapKit'
     pod 'Alamofire'

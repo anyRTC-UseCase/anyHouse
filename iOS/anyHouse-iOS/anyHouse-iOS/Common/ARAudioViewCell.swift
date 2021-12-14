@@ -5,18 +5,18 @@
 //  Created by 余生丶 on 2021/3/29.
 //
 
-import UIKit
 import AttributedString
+import UIKit
 
 class ARMainTableViewCell: UITableViewCell {
-    @IBOutlet weak var roomNameLabel: UILabel!
-    @IBOutlet weak var imageView0: UIImageView!
-    @IBOutlet weak var imageView1: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var numberLabel: UILabel!
-    @IBOutlet weak var blackButton: UIButton!
+    @IBOutlet var roomNameLabel: UILabel!
+    @IBOutlet var imageView0: UIImageView!
+    @IBOutlet var imageView1: UIImageView!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var numberLabel: UILabel!
+    @IBOutlet var blackButton: UIButton!
     
-    var onButtonTapped : (() -> Void)? = nil
+    var onButtonTapped: (() -> Void)?
     
     var listModel: ARAudioRoomListModel? {
         didSet {
@@ -42,9 +42,9 @@ class ARMainTableViewCell: UITableViewCell {
                 """)
             }
             
-            var attributeText: AttributedString = AttributedString(NSAttributedString())
+            var attributeText = AttributedString(NSAttributedString())
             for userModel in listModel!.userList {
-                let name: AttributedString = .init("""
+                let name = AttributedString.init("""
                     \(userModel.userName!) \(.image(#imageLiteral(resourceName: "icon_speaker"), .custom(.center, size: .init(width: 20, height: 20)))) \n
                 """)
                 attributeText += name
@@ -52,7 +52,7 @@ class ARMainTableViewCell: UITableViewCell {
             nameLabel.attributed.text = attributeText
             
             numberLabel.attributed.text = .init("""
-                \(listModel?.userTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_user"), .custom(.center, size: CGSize.init(width: 24, height: 24))))  \(listModel?.speakerTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_speakers"), .custom(.center, size: CGSize.init(width: 24, height: 24))))
+                \(listModel?.userTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_user"), .custom(.center, size: CGSize(width: 24, height: 24))))  \(listModel?.speakerTotalNum ?? 0)\(.image(#imageLiteral(resourceName: "icon_speakers"), .custom(.center, size: CGSize(width: 24, height: 24))))
             """)
             blackButton.isHidden = (listModel?.ownerUid == UserDefaults.string(forKey: .uid))
         }
@@ -66,8 +66,7 @@ class ARMainTableViewCell: UITableViewCell {
 }
 
 class ARAudioCollectionReusableView: UICollectionReusableView {
-    
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet var titleLabel: UILabel!
     
     func update(section: NSInteger, model: ARRoomInfoModel?) {
         if section == 0 {
@@ -92,12 +91,11 @@ class ARAudioCollectionReusableView: UICollectionReusableView {
 }
 
 class ARMicCell: UITableViewCell {
+    @IBOutlet var avatarImageView: UIImageView!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var invitationButton: UIButton!
     
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var invitationButton: UIButton!
-    
-    var onButtonTapped : (() -> Void)? = nil
+    var onButtonTapped: (() -> Void)?
     
     var micModel: ARMicModel? {
         didSet {
@@ -138,10 +136,9 @@ class ARGeneralTableViewCell: UITableViewCell {
 }
 
 class ARAudioViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var avatarImageView: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var audioImageView: UIImageView!
+    @IBOutlet var avatarImageView: UIImageView!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var audioImageView: UIImageView!
     
     private let radarAnimation = "radarAnimation"
 
@@ -198,11 +195,11 @@ class ARAudioViewCell: UICollectionViewCell {
 
         let scaleAnimation = CABasicAnimation(keyPath: "transform")
         if isRound {
-            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 0, 0, 0))
+            scaleAnimation.fromValue = NSValue(caTransform3D: CATransform3DScale(CATransform3DIdentity, 0, 0, 0))
         } else {
-            scaleAnimation.fromValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.0, 1.0, 0))
+            scaleAnimation.fromValue = NSValue(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.0, 1.0, 0))
         }
-        scaleAnimation.toValue = NSValue.init(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.3, 1.3, 0))
+        scaleAnimation.toValue = NSValue(caTransform3D: CATransform3DScale(CATransform3DIdentity, 1.3, 1.3, 0))
 
         let animationGroup = CAAnimationGroup()
         animationGroup.animations = [opacityAnimation, scaleAnimation]
@@ -228,19 +225,18 @@ class ARAudioViewCell: UICollectionViewCell {
 }
 
 class ARReportCollectionViewCell: UICollectionViewCell {
-    
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet var titleLabel: UILabel!
     
     var menuItem: ARReportItem? {
         didSet {
-            titleLabel.text = menuItem?.title;
+            titleLabel.text = menuItem?.title
             if menuItem!.isSelected {
                 titleLabel.layer.borderColor = UIColor(hexString: "#E75D5A").cgColor
                 titleLabel.font = UIFont(name: "PingFangSC-Semibold", size: 12)
                 titleLabel.textColor = UIColor(hexString: "#E75D5A")
             } else {
                 titleLabel.layer.borderColor = UIColor(hexString: "#F1EFE5").cgColor
-                titleLabel.font = UIFont.init(name: "PingFang SC", size: 14)
+                titleLabel.font = UIFont(name: "PingFang SC", size: 14)
                 titleLabel.textColor = UIColor(hexString: "#999999")
             }
         }

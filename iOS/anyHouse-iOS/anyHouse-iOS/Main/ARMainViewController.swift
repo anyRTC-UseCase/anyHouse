@@ -9,6 +9,7 @@ import UIKit
 import MJRefresh
 
 class ARMainViewController: UIViewController {
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var nameButton: UIButton!
     @IBOutlet weak var avatarButton: UIButton!
