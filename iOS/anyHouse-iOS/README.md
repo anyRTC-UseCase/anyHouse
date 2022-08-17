@@ -22,9 +22,9 @@ use_frameworks!
 
 target 'anyHouse-iOS' do
     #anyRTC 音视频库
-    pod 'ARtcKit_iOS', '~> 4.1.4.1'
+    pod 'ARtcKit_iOS', '~> 4.2.2.7'
     #anyRTC 实时消息库
-    pod 'ARtmKit_iOS', '~> 1.0.1.4'
+    pod 'ARtmKit_iOS', '~> 1.0.2.0'
 end
 ```
 
