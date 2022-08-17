@@ -37,7 +37,7 @@ class ARMineViewController: UIViewController {
          MenuItem(name: "免责声明", icon: "icon_arrow"),
          MenuItem(name: "注册开发者账号", icon: "icon_arrow")],
         
-        [MenuItem(name: "发版时间", detail: "2021-04-10"),
+        [MenuItem(name: "发版时间", detail: "2022-08-17"),
          MenuItem(name: "SDK版本", detail:  String(format: "v %@", ARtcEngineKit.getSdkVersion())),
          MenuItem(name: "软件版本", detail: String(format: "v %@", Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! CVarArg))]
     ]

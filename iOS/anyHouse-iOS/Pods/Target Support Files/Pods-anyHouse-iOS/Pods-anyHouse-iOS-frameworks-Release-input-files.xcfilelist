@@ -1,5 +1,5 @@
 ${PODS_ROOT}/Target Support Files/Pods-anyHouse-iOS/Pods-anyHouse-iOS-frameworks.sh
-${PODS_ROOT}/ARtcKit_iOS/ARtcKit/ARtcKit.framework
+${PODS_ROOT}/ARtcKit_iOS/ARtcKit.framework
 ${PODS_ROOT}/ARtmKit_iOS/ARtmKit/ARtmKit.framework
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
 ${BUILT_PRODUCTS_DIR}/AttributedString/AttributedString.framework

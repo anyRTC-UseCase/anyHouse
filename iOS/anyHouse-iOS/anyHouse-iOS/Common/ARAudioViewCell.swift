@@ -42,9 +42,9 @@ class ARMainTableViewCell: UITableViewCell {
                 """)
             }
             
-            var attributeText = AttributedString(NSAttributedString())
+            var attributeText = ASAttributedString(NSAttributedString())
             for userModel in listModel!.userList {
-                let name = AttributedString.init("""
+                let name = ASAttributedString.init("""
                     \(userModel.userName!) \(.image(#imageLiteral(resourceName: "icon_speaker"), .custom(.center, size: .init(width: 20, height: 20)))) \n
                 """)
                 attributeText += name
